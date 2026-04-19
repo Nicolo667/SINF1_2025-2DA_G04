@@ -134,3 +134,24 @@ footer { text-align: center; padding: 3rem; background: #ddd; font-size: 0.8rem;
     opacity: 0.9;
 }
 
+.profile-btn {
+    background-color: var(--white);
+    color: var(--primary); 
+    width: 40px;
+    height: 40px;
+    border-radius: 50%; /* perfect circle */
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    text-decoration: none;
+    transition: all 0.3s ease;
+    border: 2px solid transparent;
+}
+
+.profile-btn:hover {
+    background-color: var(--accent); /* become yellow */
+    transform: scale(1.1); /* bigger */
+    box-shadow: 0 4px 8px rgba(0,0,0,0.2);
+}
+
+
