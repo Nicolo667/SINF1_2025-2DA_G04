@@ -1,1 +1,64 @@
-<!-- this is the main page of the Website -->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport", width=device-width> <!-- adapt the page to any device -->
+    <title>Queima das Fitas Porto 2026</title>
+    <link rel="stylesheet" href="../CSS/main.css"> <!-- connect the html page with css page -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;800&display=swap" rel="stylesheet"> <!-- this take a standard font on our PC-->
+</head>
+<body>
+
+    <header> <!-- the part of the page on the top -->
+        <a href="#" class="logo">QUEIMA '26</a>
+        <nav>
+            <a href="#events">Schedule</a> <!-- when i click on it, it sends me to the section with id: events -->
+            <a href="#tents">Faculties</a> <!-- same but with others id -->
+            <a href="#artists">Artists</a>
+            <button class="btn-nav outline" onclick="handleAuth('login')">Login</button> <!-- we need to create the function on 'js page' -->
+            <button class="btn-nav solid" onclick="handleAuth('register')">Register</button>
+        </nav>
+    </header>
+
+
+    <section class="hero">
+        <h1>Queima das Fitas Porto</h1>
+        <p>Join the biggest student festival in Portugal. Experience the music, the parades, and the legendary academic traditions of Porto.</p>
+        <a href="#events" class="btn">View Schedule</a> <!-- it show the events -->
+    </section>
+
+    <main class="container">
+        <section id="events"> <!-- id is useful to connect this section with the header -->
+            <h2>Main Events</h2>
+            <div class="filter-controls">
+                <button class="filter-btn active" onclick="filterEvents('all')">All</button> <!-- js to shows all or only tradition or music events. -->
+                <!-- this button is default active -->
+                <button class="filter-btn" onclick="filterEvents('Tradition')">Tradition</button>
+                <button class="filter-btn" onclick="filterEvents('Music')">Music</button>
+            </div>
+            <div class="grid" id="events-grid"> </div> <!-- this is useful for the css and js pages is an empty container, js full this container -->
+        </section>
+
+        <section id="tents" style="margin-top: 4rem;">
+            <h2>Faculty Tents</h2>
+            <div class="grid" id="tents-grid"> </div>
+        </section>
+
+        <section id="artists" class="container">
+        <h2>Artists</h2>
+        <div class="grid">
+            <p>Check out the full lineup for Queima 2026!</p>
+            <button class="btn-nav solid" onclick="showArtistsPage()">See All Artists →</button>
+        </div>
+
+</section>
+    </main>
+
+    <footer>
+        <p>Project for <b>SINF1</b> · ISEP · 2026</p>
+        <p>Group A_G04</p>
+    </footer>
+
+    <script src="../JS/main.js"></script> <!-- to connect the js page -->
+</body>
+</html>

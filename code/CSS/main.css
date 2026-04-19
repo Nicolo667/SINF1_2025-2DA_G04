@@ -1,0 +1,136 @@
+:root {
+    /* this is useful to organize better our css file, we create some variable correlate with the colors */
+    --primary: #0a1931;
+    --accent: #f5c518;
+    --bg: #f4f7f6;
+    --text: #333;
+    --white: #ffffff;
+}
+
+* { margin: 0; padding: 0; box-sizing: border-box; }
+/* all the elements in the page has this proprieties: margins and we create a box */
+
+body { /* these are the main rules of the page (int he body) */
+    font-family: 'Inter', sans-serif; /* is the main font (downloaded i html page) and sans-serif is the reserve font (if inter doesn't work) */ 
+    background-color: var(--bg); /* we call the variable from :root */
+    color: var(--text); 
+    line-height: 1.6; 
+}
+
+header { 
+    background: var(--primary); 
+    color: var(--white); 
+    padding: 1rem 5%; /* 1rem = almost 16 px */
+    display: flex; /* text that appears next to each other on the same line */
+    justify-content: space-between; /* logo on the left and menu on the right */
+    align-items: center; 
+    top: 0;
+    position: sticky; /*top + position -> block header even when i scroll down */
+    z-index: 1000; /* header on the top of all */
+}
+
+.logo { font-weight: 800; font-size: 1.5rem; color: var(--accent); text-decoration: none; }
+/* recall the logo class */
+
+nav a { 
+    color: var(--white); 
+    text-decoration: none; 
+    margin-left: 1.5rem; 
+    font-size: 0.9rem; 
+    font-weight: 600; 
+}
+
+/* recall class hero */
+.hero { 
+    background: linear-gradient(rgba(10,25,49,0.8), rgba(10,25,49,0.8)), /*the color of 'background'*/
+                url('https://images.unsplash.com/photo-1533174072545-7a4b6ad7a6c3?auto=format&fit=crop&w=1350&q=80');
+                /* the link of the picture */
+    background-size: cover; /*image cover all the background*/
+    background-position: center;
+    color: var(--white); 
+    padding: 6rem 5%; 
+    text-align: center; 
+}
+
+.btn { 
+    background: var(--accent); 
+    color: var(--primary); 
+    padding: 0.8rem 2rem; 
+    border-radius: 5px; 
+    text-decoration: none; 
+    font-weight: 700; 
+    display: inline-block;
+    margin-top: 1rem;
+}
+
+.btn:hover{
+    transform: translateY(-1px);
+}
+
+.container { max-width: 1100px; margin: 3rem auto; padding: 0 1.5rem; }
+
+h2 { margin-bottom: 2rem; border-left: 6px solid var(--accent); padding-left: 1rem; }
+
+.filter-controls { margin-bottom: 2rem; }
+
+.filter-btn {
+    padding: 0.5rem 1.5rem;
+    border: 2px solid var(--primary);
+    background: transparent;
+    cursor: pointer;
+    font-weight: 600;
+    margin-right: 0.5rem;
+    border-radius: 4px;
+}
+
+.filter-btn.active { background: var(--primary); color: var(--white); } /*add the background in filter btn */
+
+.grid { 
+    display: grid; /*arranges all the elements like a grid*/
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); 
+    /* repeats the pattern for all columns and organizes them according to the parameters */
+    gap: 2rem; 
+}
+
+.card { /*js create new element of class card */
+    background: var(--white); 
+    padding: 2rem; 
+    border-radius: 10px; 
+    box-shadow: 0 5px 15px rgba(0,0,0,0.5); /* put a shadow */
+    border-top: 5px solid transparent;
+    transition: 0.3s;
+}
+
+.card:hover { transform: translateY(-5px); border-top-color: var(--accent); }
+
+.category { font-size: 0.7rem; font-weight: 800; color: var(--accent); text-transform: uppercase; } /*class that is generated in js */
+
+footer { text-align: center; padding: 3rem; background: #ddd; font-size: 0.8rem; margin-top: 4rem; }
+
+.btn-nav {
+    padding: 0.4rem 1rem;
+    margin-left: 0.8rem;
+    border-radius: 4px;
+    font-weight: 700;
+    cursor: pointer;
+    font-size: 0.85rem;
+    transition: 0.3s;
+}
+
+.btn-nav.outline {
+    background: transparent;
+    border: 1px solid var(--accent);
+    color: var(--accent);
+}
+
+.btn-nav.solid {
+    background: var(--accent);
+    border: 1px solid var(--accent);
+    color: var(--primary);
+}
+
+.btn-nav:hover {
+    transform: translateY(-2px);
+    opacity: 0.9;
+}
+
