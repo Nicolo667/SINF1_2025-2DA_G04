@@ -1,29 +1,36 @@
-document.getElementById('loginForm').addEventListener('submit', function(e) {
-    e.preventDefault(); 
+document.getElementById('loginForm').addEventListener('submit', async function(e) {
+    e.preventDefault();
 
-    // create variables
-    const passwordInput = document.getElementById('password').value;
-    const emailInput = document.getElementById('email');
-    const emailError = document.getElementById('emailError');
-    const emailValue = emailInput.value;
+    const emailInput  = document.getElementById('email');
+    const emailError  = document.getElementById('emailError');
+    const emailValue  = emailInput.value.trim();
+    const passwordValue = document.getElementById('password').value;
 
-    // must have: @ and one '.' after @ (create the patter for the email)
     const emailPattern = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-
     if (!emailPattern.test(emailValue)) {
-        // email doesn't correct
-        emailError.textContent = "Please enter a valid email address (e.g., name@domain.com)"; // error message 
+        emailError.textContent = "Please enter a valid email address (e.g., name@domain.com)";
         emailInput.style.borderColor = "red";
-        return; // stop the code
+        return;
     }
-        
-    // email is valid
-    emailError.textContent = ""; // error message become empty
+    emailError.textContent = "";
+    emailInput.style.borderColor = "";
 
-    // we need to call de SQL Database here: <-- IMP!!!!!!!!!!!
-    if (emailValue && passwordInput) {        
-        // success, we come back at home page
-        alert("sucess!");
-        window.location.href = './profile.html'; 
+    try {
+        const response = await fetch('../PHP/login.php', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ email: emailValue, password: passwordValue })
+        });
+
+        const data = await response.json();
+
+        if (data.success) {
+            window.location.href = './profile.html';
+        } else {
+            emailError.textContent = data.message || "Invalid email or password";
+            emailInput.style.borderColor = "red";
+        }
+    } catch (err) {
+        emailError.textContent = "Connection error. Please try again.";
     }
 });
