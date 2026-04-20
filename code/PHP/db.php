@@ -1,6 +1,6 @@
 <?php
 // Database connection configuration
-$host = 'localhost';
+$host = '127.0.0.1';
 $db_name = 'sinf1_project';
 $db_user = 'root';
 $db_pass = ''; // Change if needed
