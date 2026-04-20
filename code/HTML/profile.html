@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>My Profile - Queima 2026</title>
+    <link rel="stylesheet" href="../CSS/main.css">
+    <link rel="stylesheet" href="../CSS/profile.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;700;800&display=swap" rel="stylesheet">
+</head>
+<body>
+
+    <header class="header">
+        <a href="./mainPage.html" class="logo">Queima 2026</a>
+        <nav>
+            <a href="./mainPage.html" class="btn-nav outline">Home</a>
+        </nav>
+    </header>
+
+    <main class="profile-container">
+        <section class="profile-header">
+            <div class="profile-avatar">
+                <svg viewBox="0 0 24 24" width="80" height="80" fill="var(--accent)">
+                    <path d="M12 12c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm0 2c-2.67 0-8 1.34-8 4v2h16v-2c0-2.66-5.33-4-8-4z"/>
+                </svg>
+            </div>
+            <h1 id="fullName">Name Surname</h1>
+            <p class="profile-meta">@<span id="displayUsername">username</span> • <span id="displayEmail">email@example.com</span></p>
+        </section>
+
+        <section class="my-events">
+            <div class="section-header">
+                <h2>My Events</h2>
+                <a href="./mainPage.html#events" class="btn-add-event"> <!-- we should change this to a page who allow you to sign up for a Event-->
+                    + Sign up for an event
+                </a>
+            </div>
+
+            <div id="eventsList" class="events-grid">
+                </div>
+        </section>
+    </main>
+
+    <script src="../JS/profile.js"></script>
+</body>
+</html> 
