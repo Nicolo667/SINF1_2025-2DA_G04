@@ -1,29 +1,29 @@
-document.addEventListener('DOMContentLoaded', function() {
-    // User data simulation (in the future it will come from the DB)
-    const userData = {
-        firstName: "Mario",
-        lastName: "Rossi",
-        username: "mario_2026",
-        email: "mario.rossi@esempio.it"
-    };
+document.addEventListener('DOMContentLoaded', async function() {
+    try {
+        const response = await fetch('../PHP/session.php');
+        const data = await response.json();
 
-    // array of events 
-    const myEvents = [
-         { 
-            title: "Cortejo Académico", 
-            date: "12 Maggio 2026", 
-            location: "Baixa, Porto",
-            type: "Tradition"
-            
-        },
-        { 
-            title: "Noite no Queimódromo", 
-            date: "15 Maggio 2026", 
-            location: "Estrada da Circunvalação",
-            type: "Music"
+        if (!data.loggedIn) {
+            window.location.href = './loginPage.html';
+            return;
         }
-        
-    ];
+
+        document.getElementById('fullName').textContent        = data.name || `${data.firstName} ${data.lastName}`;
+        document.getElementById('displayUsername').textContent = data.username || '';
+        document.getElementById('displayEmail').textContent    = data.email;
+
+    } catch (err) {
+        window.location.href = './loginPage.html';
+    }
+
+    const eventsList = document.getElementById('eventsList');
+    eventsList.innerHTML = `
+        <div class="no-events">
+            <p>You are not yet registered for any event.</p>
+            <p style="font-size: 0.9rem; color: #666;">Discover the program and join the events!</p>
+        </div>
+    `;
+});
 
     // Fill User Info
     document.getElementById('fullName').textContent = `${userData.firstName} ${userData.lastName}`;
