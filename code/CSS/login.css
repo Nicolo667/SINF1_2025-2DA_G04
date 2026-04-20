@@ -1,0 +1,120 @@
+:root { /* create our variables */
+    --primary: #0a1931;   
+    --accent: #f5c518;    
+    --bg: #f4f7f6;        
+    --text: #333;        
+    --white: #ffffff;
+}
+
+body {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 100vh;
+    margin: 0;
+    background-color: var(--bg); 
+}
+
+.login-container {
+    width: 100%;
+    max-width: 400px;
+    padding: 20px;
+}
+
+.login-card {
+    background: var(--white);
+    padding: 2.5rem;
+    border-radius: 15px;
+    box-shadow: 0 10px 30px rgba(10, 25, 49, 0.4); /* add the shadow*/
+    /* same style as the events card with the yellow on the top*/
+    border-top: 6px solid var(--accent); 
+}
+
+.login-header h2 {
+    color: var(--primary); /* blue title */
+    margin-bottom: 0.5rem;
+    text-align: center;
+    font-weight: 800;
+}
+
+.login-header p {
+    color: var(--text);
+    opacity: 0.8;
+    text-align: center;
+    margin-bottom: 2rem;
+}
+
+.input-group {
+    margin-bottom: 1.5rem;
+}
+
+.input-group label {
+    display: block;
+    margin-bottom: 0.5rem;
+    color: var(--primary); /* blue label */
+    font-weight: 700;
+}
+
+.input-group input {
+    width: 100%;
+    padding: 0.8rem;
+    border: 2px solid #eee;
+    border-radius: 8px;
+    font-family: inherit;
+    transition: all 0.3s ease;
+}
+
+/* border become yellow when user click on it */
+.input-group input:focus {
+    outline: none;
+    border-color: var(--accent);
+    background-color: #fffdf5; /* Una lievissima sfumatura gialla */
+}
+
+
+.login-btn {
+    width: 100%;
+    background-color: var(--accent);
+    color: var(--primary);
+    border: none;
+    padding: 1rem;
+    border-radius: 8px;
+    font-weight: 800;
+    font-size: 1rem;
+    cursor: pointer;
+    transition: transform 0.2s, background-color 0.3s;
+    margin-top: 1rem;
+}
+
+.login-btn:hover {
+    background-color: #e5b816; /* change when we pass on the btn*/
+    transform: translateY(-3px);
+}
+
+.login-footer {
+    margin-top: 2rem;
+    text-align: center;
+    font-size: 0.9rem;
+}
+
+/* registration link: become yellow  */
+.login-footer a {
+    color: var(--primary);
+    text-decoration: none;
+    font-weight: 700;
+    transition: color 0.3s;
+}
+
+.login-footer a:hover {
+    color: var(--accent);
+    text-decoration: underline;
+}
+
+.back-link {
+    display: block;
+    margin-top: 1.5rem;
+    color: var(--primary);
+    opacity: 0.6;
+    font-weight: 400 !important;
+}
+
