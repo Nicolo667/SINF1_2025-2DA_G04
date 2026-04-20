@@ -1,30 +1,22 @@
-// WE NEED TO PUT THIS DATA INTO A DATABASE AND CONNECT IT TO THESE FUNCTIONS!!!
+let eventsData = [];
 
-// Data for Events
-const eventsData = [
-    { title: "Serenata Monumental", date: "May 15", time: "23:59", location: "Sé do Porto", type: "Tradition" },
-    { title: "Concert Night", date: "May 16", time: "22:00", location: "Queimódromo", type: "Music" },
-    { title: "Cortejo Académico", date: "May 19", time: "14:00", location: "Baixa", type: "Tradition" },
-    { title: "DJ Set - Sunset", date: "May 20", time: "18:00", location: "Queimódromo", type: "Music" }
-];
-
-// Data for Tents
-const tentsData = [
-    { name: "FEUP Tent", faculty: "Engineering", highlights: "Techno & Light Shows" },
-    { name: "FMUP Tent", faculty: "Medicine", highlights: "Pop Classics" },
-    { name: "FEP Tent", faculty: "Economics", highlights: "Live DJ Sets" }
-];
-
+async function loadData() {
+    const response = await fetch('../PHP/events.php');
+    const data = await response.json();
+    eventsData = data.events;
+    renderEvents();
+    renderTents(data.tents);
+}
 
 function renderEvents(filter = 'all') {
-    const grid = document.getElementById('events-grid'); // select the id of the correct position in html page
-    grid.innerHTML = ''; // Clear current grid
+    const grid = document.getElementById('events-grid');
+    grid.innerHTML = '';
 
-    const filtered = filter === 'all' // decide whitch event shows 
-        ? eventsData 
+    const filtered = filter === 'all'
+        ? eventsData
         : eventsData.filter(e => e.type === filter);
 
-    filtered.forEach(event => { // if the filter is not 'all' create new list
+    filtered.forEach(event => {
         grid.innerHTML += `
             <div class="card">
                 <span class="category">${event.type}</span>
@@ -36,9 +28,9 @@ function renderEvents(filter = 'all') {
     });
 }
 
-function renderTents() { // generate all the tents 
+function renderTents(tents) {
     const grid = document.getElementById('tents-grid');
-    tentsData.forEach(tent => {
+    tents.forEach(tent => {
         grid.innerHTML += `
             <div class="card">
                 <span class="category">${tent.faculty}</span>
@@ -50,7 +42,6 @@ function renderTents() { // generate all the tents
 }
 
 function filterEvents(type) {
-    // Update button styling
     const btns = document.querySelectorAll('.filter-btn');
     btns.forEach(btn => {
         btn.classList.remove('active');
@@ -58,13 +49,7 @@ function filterEvents(type) {
             btn.classList.add('active');
         }
     });
-    
     renderEvents(type);
 }
 
-// to see all data in the page
-window.onload = () => {
-    renderEvents();
-    renderTents();
-};
-
+window.onload = loadData;
