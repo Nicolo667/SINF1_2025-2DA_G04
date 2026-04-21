@@ -24,3 +24,26 @@ document.addEventListener('DOMContentLoaded', async function() {
         </div>
     `;
 });
+
+document.getElementById('logoutBtn').addEventListener('click', async function() {
+    const conferma = confirm("Are you sure you want to log out??");
+    
+    if (conferma) {
+        try {
+            // Call the PHP file to destroy the session on the server
+            const response = await fetch('../PHP/logout.php');
+            const data = await response.json();
+
+            if (data.success) {
+                // We also clean the data in the browser
+                localStorage.removeItem('isLoggedIn');
+                
+                // We redirect to the home page
+                window.location.href = './mainPage.html'; 
+            }
+        } catch (err) {
+            console.error("Error during logging out:", err);
+            window.location.href = './mainPage.html';
+        }
+    }
+});

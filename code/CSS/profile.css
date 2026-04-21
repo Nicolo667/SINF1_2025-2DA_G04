@@ -53,21 +53,44 @@
     box-shadow: 0 5px 15px rgba(255, 184, 28, 0.4);
 }
 
-/* Messaggio "nessun evento" */
+
 .no-events {
     text-align: center;
     padding: 50px;
     background: #f8f9fa;
     border-radius: 15px;
     border: 2px dashed #ccc;
-    grid-column: 1 / -1; /* Occupa tutta la larghezza della griglia */
+    grid-column: 1 / -1; 
 }
 
 .events-grid {
     display: grid;
     grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); 
-    /* gap from the different cards */
     gap: 25px; 
     padding: 20px 0; 
     width: 100%;
 }
+
+.btn-logout {
+    background-color: var(--accent); 
+    color: var(--primary-blue);      
+    border: none;
+    padding: 8px 18px;
+    border-radius: 20px;
+    font-weight: 700;
+    font-family: 'Inter', sans-serif;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    font-size: 0.9rem;
+}
+
+.btn-logout:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(255, 184, 28, 0.3);
+    background-color: #fca903; 
+}
+
+.btn-logout:active {
+    transform: translateY(0);
+}
+    
