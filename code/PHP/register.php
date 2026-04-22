@@ -18,7 +18,8 @@ $lastName   = trim($data['lastName']   ?? '');
 $birthDate  = trim($data['birthDate']  ?? '');
 $email      = trim($data['email']      ?? '');
 $password   = $data['password']        ?? '';
-$role       = trim($data['role']       ?? 'student');
+// If role exists and is full, use that, otherwise always write 'user' (to fix the null problem in some variables)
+$role = (isset($data['role']) && trim($data['role']) === 'admin') ? 'admin' : 'user';
 
 if (!$username || !$firstName || !$lastName || !$birthDate || !$email || !$password) {
     http_response_code(400);
@@ -48,7 +49,7 @@ if ($check->fetch()) {
 
 $hash = password_hash($password, PASSWORD_BCRYPT);
 $stmt = $pdo->prepare('INSERT INTO users (name, username, first_name, last_name, birth_date, email, password_hash,role) VALUES (?, ?, ?, ?, ?, ?, ?, ?)');
-$stmt->execute(["$firstName $lastName", $username, $firstName, $lastName, $birthDate, $email, $hash,$role]);
+$stmt->execute(["$firstName $lastName", $username, $firstName, $lastName, $birthDate, $email, $hash, $role]);
 
 session_start();
 $_SESSION['user_id']   = $pdo->lastInsertId();
