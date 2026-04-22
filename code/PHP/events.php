@@ -18,7 +18,7 @@ $events = $stmt->fetchAll(PDO::FETCH_ASSOC);
 foreach ($events as &$event) {
     $dt = new DateTime($event['event_date']);
     $event['date'] = $dt->format('M j');
-    $event['time'] = $event['event_time'];
+    $event['time'] = substr($event['event_time'], 0, 5);
     unset($event['event_date'], $event['event_time']);
 }
 
