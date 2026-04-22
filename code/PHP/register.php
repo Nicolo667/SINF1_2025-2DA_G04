@@ -18,6 +18,7 @@ $lastName   = trim($data['lastName']   ?? '');
 $birthDate  = trim($data['birthDate']  ?? '');
 $email      = trim($data['email']      ?? '');
 $password   = $data['password']        ?? '';
+$role       = trim($data['role']       ?? 'student');
 
 if (!$username || !$firstName || !$lastName || !$birthDate || !$email || !$password) {
     http_response_code(400);
@@ -46,12 +47,12 @@ if ($check->fetch()) {
 }
 
 $hash = password_hash($password, PASSWORD_BCRYPT);
-$stmt = $pdo->prepare('INSERT INTO users (name, username, first_name, last_name, birth_date, email, password_hash) VALUES (?, ?, ?, ?, ?, ?, ?)');
-$stmt->execute(["$firstName $lastName", $username, $firstName, $lastName, $birthDate, $email, $hash]);
+$stmt = $pdo->prepare('INSERT INTO users (name, username, first_name, last_name, birth_date, email, password_hash,role) VALUES (?, ?, ?, ?, ?, ?, ?, ?)');
+$stmt->execute(["$firstName $lastName", $username, $firstName, $lastName, $birthDate, $email, $hash,$role]);
 
 session_start();
 $_SESSION['user_id']   = $pdo->lastInsertId();
 $_SESSION['user_name'] = "$firstName $lastName";
-$_SESSION['user_role'] = 'user';
+$_SESSION['user_role'] = $role;
 
 echo json_encode(['success' => true]);
