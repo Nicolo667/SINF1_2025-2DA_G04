@@ -5,27 +5,38 @@ async function loadData() {
     const data = await response.json();
     eventsData = data.events;
     renderEvents();
-    renderTents(data.tents);
+    // renderTents(data.tents); // Removed tents rendering for now...
 }
 
 function renderEvents(filter = 'all') {
     const grid = document.getElementById('events-grid');
     grid.innerHTML = '';
 
-    const filtered = filter === 'all'
-        ? eventsData
-        : eventsData.filter(e => e.type === filter);
+    let filtered; // how to filter events based on the selected category.
+    if (filter === 'all') {
+        filtered = eventsData;
+    } else if (filter === 'Music') {
+        filtered = eventsData.filter(e => e.type === 'Concert' || e.type === 'Party');
+    } else if (filter === 'Tradition') {
+        filtered = eventsData.filter(e => e.type === 'Workshop' || e.type === 'Conference' || e.type === 'Cerimony');
+    } else {
+        filtered = eventsData.filter(e => e.type === filter);
+    }
 
-    filtered.forEach(event => {
-        grid.innerHTML += `
-            <div class="card">
-                <span class="category">${event.type}</span>
-                <h3>${event.title}</h3>
-                <p>📍 ${event.location}</p>
-                <p>⏰ ${event.date}, ${event.time}</p>
-            </div>
-        `;
-    });
+    if (filtered.length === 0) {
+        grid.innerHTML = '<p style="text-align: center; color: #666;">No events found for this category.</p>';
+    } else {
+        filtered.forEach(event => {
+            grid.innerHTML += `
+                <div class="card">
+                    <span class="category">${event.type}</span>
+                    <h3>${event.title}</h3>
+                    <p>📍 ${event.location}</p>
+                    <p>⏰ ${event.date}, ${event.time}</p>
+                </div>
+            `;
+        });
+    }
 }
 
 function renderTents(tents) {
