@@ -20,6 +20,13 @@ document.addEventListener('DOMContentLoaded', async function() {
         if (data.role === 'admin') { 
             studentView.style.display = 'none';
             adminView.style.display = 'block';
+
+            const addEventBtn = document.querySelector('.btn-admin.add');
+            if (addEventBtn) {
+                addEventBtn.addEventListener('click', () => {
+                    window.location.href = './addEvent.html';
+                });
+            }
         } else { 
             studentView.style.display = 'block';
             adminView.style.display = 'none';
