@@ -1,3 +1,4 @@
+
 document.addEventListener('DOMContentLoaded', async function() {
     try {
         const response = await fetch('../PHP/session.php');
@@ -12,17 +13,31 @@ document.addEventListener('DOMContentLoaded', async function() {
         document.getElementById('displayUsername').textContent = data.username || '';
         document.getElementById('displayEmail').textContent    = data.email;
 
+        //ROLE MANAGEMENT
+        const studentView = document.getElementById('studentView');
+        const adminView = document.getElementById('adminView');
+
+        if (data.role === 'admin') { // is an admin -> show different things
+            studentView.style.display = 'none';
+            adminView.style.display = 'block';
+        } else { // is a student
+            studentView.style.display = 'block';
+            adminView.style.display = 'none';
+
+            // no events (for the students)
+            const eventsList = document.getElementById('eventsList');
+            eventsList.innerHTML = `
+                <div class="no-events">
+                    <p>You are not yet registered for any event.</p>
+                    <p style="font-size: 0.9rem; color: #666;">Discover the program and join the events!</p>
+                </div>
+            `;
+        }
+
     } catch (err) {
+        console.error("Session error:", err);
         window.location.href = './loginPage.html';
     }
-
-    const eventsList = document.getElementById('eventsList');
-    eventsList.innerHTML = `
-        <div class="no-events">
-            <p>You are not yet registered for any event.</p>
-            <p style="font-size: 0.9rem; color: #666;">Discover the program and join the events!</p>
-        </div>
-    `;
 });
 
 document.getElementById('logoutBtn').addEventListener('click', async function() {

@@ -29,16 +29,30 @@
             <p class="profile-meta">@<span id="displayUsername">username</span> • <span id="displayEmail">email@example.com</span></p>
         </section>
 
-        <section class="my-events">
+        <section id="studentView" class="my-events">
             <div class="section-header">
                 <h2>My Events</h2>
                 <a href="./mainPage.html#events" class="btn-add-event"> <!-- we should change this to a page who allow you to sign up for a Event-->
                     + Sign up for an event
                 </a>
             </div>
-
             <div id="eventsList" class="events-grid">
                 </div>
+        </section>
+
+        <section id="adminView" class="admin-controls" style="display: none;">
+            <h2>Admin Management Panel</h2>
+            <div class="admin-buttons-grid">
+                <button class="btn-admin add">
+                    <span>➕</span> Add New Event
+                </button>
+                <button class="btn-admin edit">
+                    <span>✏️</span> Edit Events
+                </button>
+                <button class="btn-admin delete">
+                    <span>🗑️</span> Delete Events
+                </button>
+            </div>
         </section>
     </main>
 
