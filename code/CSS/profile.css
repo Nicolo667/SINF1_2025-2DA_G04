@@ -126,3 +126,11 @@
     transform: translateY(-5px);
     box-shadow: 0 8px 15px rgba(0,0,0,0.1);
 }
+
+.btn-admin.import {
+    background-color: #6f42c1; 
+}
+
+.btn-admin.import:hover {
+    background-color: #5a32a3;
+}

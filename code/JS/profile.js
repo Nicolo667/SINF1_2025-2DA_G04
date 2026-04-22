@@ -1,5 +1,5 @@
-
 document.addEventListener('DOMContentLoaded', async function() {
+    
     try {
         const response = await fetch('../PHP/session.php');
         const data = await response.json();
@@ -13,18 +13,17 @@ document.addEventListener('DOMContentLoaded', async function() {
         document.getElementById('displayUsername').textContent = data.username || '';
         document.getElementById('displayEmail').textContent    = data.email;
 
-        //ROLE MANAGEMENT
+        // ROLE MANAGEMENT
         const studentView = document.getElementById('studentView');
         const adminView = document.getElementById('adminView');
 
-        if (data.role === 'admin') { // is an admin -> show different things
+        if (data.role === 'admin') { 
             studentView.style.display = 'none';
             adminView.style.display = 'block';
-        } else { // is a student
+        } else { 
             studentView.style.display = 'block';
             adminView.style.display = 'none';
 
-            // no events (for the students)
             const eventsList = document.getElementById('eventsList');
             eventsList.innerHTML = `
                 <div class="no-events">
@@ -37,6 +36,48 @@ document.addEventListener('DOMContentLoaded', async function() {
     } catch (err) {
         console.error("Session error:", err);
         window.location.href = './loginPage.html';
+    }
+
+    
+    // CSV IMPORT LOGIC (only for admin)
+    const importBtn = document.getElementById('importCsvBtn');
+    const fileInput = document.getElementById('csvFileInput');
+
+    if (importBtn && fileInput) {
+        // when click on the visible btn click also the invisible one
+        importBtn.addEventListener('click', () => fileInput.click());
+
+        fileInput.addEventListener('change', async function() {
+            if (this.files.length === 0) return;
+
+            const file = this.files[0];
+            if (!file.name.endsWith('.csv')) {
+                alert("Please select a valid CSV file.");
+                return;
+            }
+
+            const formData = new FormData();
+            formData.append('csvFile', file);
+
+            try {
+                const response = await fetch('../PHP/import_csv.php', {
+                    method: 'POST',
+                    body: formData
+                });
+                const result = await response.json();
+
+                if (result.success) {
+                    alert("✅ Success: " + result.message);
+                } else {
+                    alert("❌ Error: " + result.message);
+                }
+            } catch (err) {
+                console.error("CSV upload error:", err);
+                alert("Network error while uploading CSV.");
+            } finally {
+                fileInput.value = ''; // reset 
+            }
+        });
     }
 });
 
