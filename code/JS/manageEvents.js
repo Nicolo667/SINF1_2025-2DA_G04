@@ -57,8 +57,8 @@ async function loadEvents() { // this is for load all the events on the page (fr
             grid.appendChild(card);
         });
 
-        // Add event listeners to edit buttons
-        document.querySelectorAll('.edit-btn').forEach(btn => { // creation of the edit button.
+        // Add event listeners to edit buttons -> this is the edit btn
+        document.querySelectorAll('.edit-btn').forEach(btn => { 
             btn.addEventListener('click', function() {
                 const eventId = this.getAttribute('data-event-id'); // when click on the edit button we get the event id and then we redirect to the editEvent page.
                 window.location.href = `editEvent.html?event_id=${eventId}`;
