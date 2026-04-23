@@ -43,7 +43,10 @@ async function loadEvents() { // this is for load all the events on the page (fr
             const card = document.createElement('div');
             card.className = 'event-card';
             card.innerHTML = `
-                <button class="delete-btn" data-event-id="${event.id}">🗑️</button>
+                <div class="card-actions">
+                    <button class="edit-btn" data-event-id="${event.id}">✏️</button> // the edit button.
+                    <button class="delete-btn" data-event-id="${event.id}">🗑️</button>
+                </div>
                 <h3>${event.title}</h3>
                 <p><strong>Type:</strong> ${event.type}</p>
                 <p><strong>Location:</strong> ${event.location}</p>
@@ -52,6 +55,14 @@ async function loadEvents() { // this is for load all the events on the page (fr
                 <p><strong>Description:</strong> ${event.description || 'No description'}</p>
             `;
             grid.appendChild(card);
+        });
+
+        // Add event listeners to edit buttons
+        document.querySelectorAll('.edit-btn').forEach(btn => { // creation of the edit button.
+            btn.addEventListener('click', function() {
+                const eventId = this.getAttribute('data-event-id'); // when click on the edit button we get the event id and then we redirect to the editEvent page.
+                window.location.href = `editEvent.html?event_id=${eventId}`;
+            });
         });
 
         // Add event listeners to delete buttons

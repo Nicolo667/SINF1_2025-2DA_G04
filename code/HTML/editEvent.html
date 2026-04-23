@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+    <meta charset="UTF-8">
+    <title>SINF1 - Edit Event</title>
+    <link rel="stylesheet" href="../CSS/profile.css">
+    <link rel="stylesheet" href="../CSS/editEvent.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;700;800&display=swap" rel="stylesheet">
+</head>
+<body>
+    <div class="form-container">
+        <h2>✏️ Edit Event</h2>
+        <form id="editEventForm">
+            <input type="hidden" name="event_id" id="eventId">
+            <div class="form-group">
+                <label>Event Name</label>
+                <input type="text" name="title" id="title" required>
+            </div>
+            <div class="form-group">
+                <label>Start Date</label>
+                <input type="date" name="event_date" id="eventDate" required>
+            </div>
+            <div class="form-group">
+                <label>Start Time</label>
+                <input type="time" name="event_time" id="eventTime" required>
+            </div>
+            <div class="form-group">
+                <label>Location</label>
+                <input type="text" name="location" id="location" required>
+            </div>
+            <div class="form-group">
+                <label>Category</label>
+                <select name="type" id="type">
+                    <option value="Concert">Concert</option>
+                    <option value="Workshop">Workshop</option>
+                    <option value="Conference">Conference</option>
+                    <option value="Party">Party</option>
+                    <option value="Cerimony">Cerimony</option>
+                </select>
+            </div>
+            <div class="form-group">
+                <label>Description</label>
+                <textarea name="description" id="description" rows="4"></textarea>
+            </div>
+            <button type="submit" class="btn-confirm">Save Changes</button>
+        </form>
+    </div>
+
+    <script src="../JS/editEvent.js"></script>
+</body>
+</html>
