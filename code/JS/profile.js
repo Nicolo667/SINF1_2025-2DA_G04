@@ -27,6 +27,14 @@ document.addEventListener('DOMContentLoaded', async function() {
                     window.location.href = './addEvent.html';
                 });
             }
+
+            const editEventBtn = document.querySelector('.btn-admin.edit'); // open the page to edit events (also delete them)
+            if (editEventBtn) {
+                editEventBtn.addEventListener('click', () => {
+                    window.location.href = './manageEvents.html';
+                });
+            }
+
         } else { 
             studentView.style.display = 'block';
             adminView.style.display = 'none';

@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Manage Events - Queima 2026</title>
+    <link rel="stylesheet" href="../CSS/main.css">
+    <link rel="stylesheet" href="../CSS/profile.css">
+    <link rel="stylesheet" href="../CSS/manageEvents.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;700;800&display=swap" rel="stylesheet">
+</head>
+<body>
+    <header class="header">
+        <a href="./mainPage.html" class="logo">Queima 2026</a>
+        <nav style="display: flex; gap: 10px;">
+            <a href="./profile.html" class="btn-nav outline">Back to Profile</a>
+            <button id="logoutBtn" class="btn-logout">Logout</button>
+        </nav>
+    </header>
+
+    <main class="profile-container">
+        <section class="profile-header">
+            <h1>Manage My Events</h1>
+            <p>View and delete events you have created.</p>
+        </section>
+
+        <section class="my-events">
+            <div id="eventsGrid" class="events-grid">
+                <!-- Events will be loaded here -->
+            </div>
+        </section>
+    </main>
+
+    <script src="../JS/manageEvents.js"></script>
+</body>
+</html>
