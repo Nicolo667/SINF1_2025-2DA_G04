@@ -1,120 +1,76 @@
-document.addEventListener('DOMContentLoaded', async function() {
+document.addEventListener('DOMContentLoaded', () => {
+    const role = localStorage.getItem('userRole');
+    const name = localStorage.getItem('userName'); // Defined as 'name'
+    const lastName = localStorage.getItem('userLastName');
+    const email = localStorage.getItem('userEmail');
+    const username = localStorage.getItem('userUsername');
+
+    const fullNameElement = document.getElementById('fullName');
+    const usernameElement = document.getElementById('displayUsername');
+    const emailElement = document.getElementById('displayEmail');
+
     
-    try {
-        const response = await fetch('../PHP/session.php');
-        const data = await response.json();
-
-        if (!data.loggedIn) {
-            window.location.href = './loginPage.html';
-            return;
-        }
-
-        document.getElementById('fullName').textContent        = data.name || `${data.firstName} ${data.lastName}`;
-        document.getElementById('displayUsername').textContent = data.username || '';
-        document.getElementById('displayEmail').textContent    = data.email;
-
-        // ROLE MANAGEMENT
-        const studentView = document.getElementById('studentView');
-        const adminView = document.getElementById('adminView');
-
-        if (data.role === 'admin') { 
-            studentView.style.display = 'none';
-            adminView.style.display = 'block';
-
-            const addEventBtn = document.querySelector('.btn-admin.add');
-            if (addEventBtn) {
-                addEventBtn.addEventListener('click', () => {
-                    window.location.href = './addEvent.html';
-                });
-            }
-
-            const editEventBtn = document.querySelector('.btn-admin.edit'); // open the page to edit events (also delete them)
-            if (editEventBtn) {
-                editEventBtn.addEventListener('click', () => {
-                    window.location.href = './manageEvents.html';
-                });
-            }
-
-        } else { 
-            studentView.style.display = 'block';
-            adminView.style.display = 'none';
-
-            const eventsList = document.getElementById('eventsList');
-            eventsList.innerHTML = `
-                <div class="no-events">
-                    <p>You are not yet registered for any event.</p>
-                    <p style="font-size: 0.9rem; color: #666;">Discover the program and join the events!</p>
-                </div>
-            `;
-        }
-
-    } catch (err) {
-        console.error("Session error:", err);
-        window.location.href = './loginPage.html';
+    if (fullNameElement) {
+        fullNameElement.textContent = (name && lastName) ? `${name} ${lastName}` : "User Profile";
+    }
+    if (usernameElement) {
+        usernameElement.textContent = username || "username";
+    }
+    if (emailElement) {
+        emailElement.textContent = email || "email@example.com";
     }
 
-    
-    // CSV IMPORT LOGIC (only for admin)
-    const importBtn = document.getElementById('importCsvBtn');
-    const fileInput = document.getElementById('csvFileInput');
+    // role pages.
+    const adminView = document.getElementById('adminView'); 
+    const studentView = document.getElementById('studentView');
 
-    if (importBtn && fileInput) {
-        // when click on the visible btn click also the invisible one
-        importBtn.addEventListener('click', () => fileInput.click());
+    if (role === 'admin' || role === 'administrator') {
+        if (adminView) adminView.style.display = 'block';
+        if (studentView) studentView.style.display = 'none';
+    } else {
+        if (adminView) adminView.style.display = 'none';
+        if (studentView) studentView.style.display = 'block';
+    }
 
-        fileInput.addEventListener('change', async function() {
-            if (this.files.length === 0) return;
-
-            const file = this.files[0];
-            if (!file.name.endsWith('.csv')) {
-                alert("Please select a valid CSV file.");
-                return;
-            }
-
+    //Logout functionality
+    const logoutBtn = document.getElementById('logoutBtn');
+    if (logoutBtn) {
+        logoutBtn.addEventListener('click', () => {
             const formData = new FormData();
-            formData.append('csvFile', file);
-
-            try {
-                const response = await fetch('../PHP/import_csv.php', {
-                    method: 'POST',
-                    body: formData
+            formData.append('action', 'logout');
+            fetch('../PHP/controller.php', { method: 'POST', body: formData })
+                .then(response => response.json())
+                .then(() => {
+                    localStorage.clear();
+                    window.location.href = 'mainPage.html';
+                })
+                .catch(() => {
+                    localStorage.clear();
+                    window.location.href = 'mainPage.html';
                 });
-                const result = await response.json();
-
-                if (result.success) {
-                    alert("✅ Success: " + result.message);
-                } else {
-                    alert("❌ Error: " + result.message);
-                }
-            } catch (err) {
-                console.error("CSV upload error:", err);
-                alert("Network error while uploading CSV.");
-            } finally {
-                fileInput.value = ''; // reset 
-            }
         });
     }
-});
 
-document.getElementById('logoutBtn').addEventListener('click', async function() {
-    const conferma = confirm("Are you sure you want to log out??");
-    
-    if (conferma) {
-        try {
-            // Call the PHP file to destroy the session on the server
-            const response = await fetch('../PHP/logout.php');
-            const data = await response.json();
+    // load events for admin.
+    document.addEventListener('click', (e) => {
+        const target = e.target.closest('.btn-admin');
 
-            if (data.success) {
-                // We also clean the data in the browser
-                localStorage.removeItem('isLoggedIn');
-                
-                // We redirect to the home page
-                window.location.href = './mainPage.html'; 
-            }
-        } catch (err) {
-            console.error("Error during logging out:", err);
-            window.location.href = './mainPage.html';
+        if (target && target.classList.contains('add')) {
+            console.log("Redirecting to addEvent.html...");
+            window.location.href = 'addEvent.html';
         }
+
+        if (target && target.classList.contains('edit')) { 
+            window.location.href = 'manageEvents.html'; // redirect to the manage page.
+        }
+    });
+    
+    //Load events
+    if (typeof loadEvents === "function") {
+        loadEvents();
     }
 });
+
+function loadEvents() {
+    // we implement this later.
+}

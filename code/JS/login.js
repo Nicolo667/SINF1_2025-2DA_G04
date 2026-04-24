@@ -1,36 +1,45 @@
-document.getElementById('loginForm').addEventListener('submit', async function(e) {
-    e.preventDefault();
+document.addEventListener('DOMContentLoaded', () => {
+    const loginForm = document.getElementById('loginForm');
 
-    const emailInput  = document.getElementById('email');
-    const emailError  = document.getElementById('emailError');
-    const emailValue  = emailInput.value.trim();
-    const passwordValue = document.getElementById('password').value;
+    if (loginForm) {
+        loginForm.addEventListener('submit', function(e) {
+            e.preventDefault();
 
-    const emailPattern = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-    if (!emailPattern.test(emailValue)) {
-        emailError.textContent = "Please enter a valid email address (e.g., name@domain.com)";
-        emailInput.style.borderColor = "red";
-        return;
-    }
-    emailError.textContent = "";
-    emailInput.style.borderColor = "";
+            const formData = new FormData();
+            formData.append('action', 'login'); // This matches the case in controller.php so the controller understands it is a login request.
+            formData.append('email', document.getElementById('email').value);
+            formData.append('password', document.getElementById('password').value);
 
-    try {
-        const response = await fetch('../PHP/login.php', {
-            method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({ email: emailValue, password: passwordValue })
+            //call controller
+            fetch('../PHP/controller.php', {
+                method: 'POST',
+                body: formData
+            })
+            .then(response => {
+                if (!response.ok) {
+                    throw new Error('Network error or file not found');
+                }
+                return response.json();
+            })
+            .then(data => {
+                if (data.status === 'success') {
+                    // Save user info locally to use them in profile.html
+                    localStorage.setItem('userRole', data.role);
+                    localStorage.setItem('userName', data.firstName);
+                    localStorage.setItem('userLastName', data.lastName);
+                    localStorage.setItem('userEmail', data.email);
+                    localStorage.setItem('userUsername', data.username);
+                    
+                    // Redirect to your single profile page
+                    window.location.href = 'profile.html';
+                } else {
+                    alert("Error: " + data.message);
+                }
+            })
+            .catch(error => {
+                console.error('Login error:', error);
+                alert("Critical error: Make sure you are using XAMPP/Apache and not Live Server.");
+            });
         });
-
-        const data = await response.json();
-
-        if (data.success) {
-            window.location.href = './profile.html';
-        } else {
-            emailError.textContent = data.message || "Invalid email or password";
-            emailInput.style.borderColor = "red";
-        }
-    } catch (err) {
-        emailError.textContent = "Connection error. Please try again.";
     }
 });

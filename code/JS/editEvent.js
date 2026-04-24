@@ -1,59 +1,101 @@
-document.addEventListener('DOMContentLoaded', async function() {
+document.addEventListener('DOMContentLoaded', () => {
+    const editEventForm = document.getElementById('editEventForm');
+    const eventIdInput = document.getElementById('eventId');
+    const titleInput = document.getElementById('title');
+    const dateInput = document.getElementById('eventDate');
+    const timeInput = document.getElementById('eventTime');
+    const locationInput = document.getElementById('location');
+    const typeInput = document.getElementById('type');
+    const descriptionInput = document.getElementById('description');
+
     const urlParams = new URLSearchParams(window.location.search);
     const eventId = urlParams.get('event_id');
 
-    if (!eventId) { // there could be an event id in the url.
-        alert('Event ID not provided');
+    if (!eventId) {
+        alert('Missing event id.');
         window.location.href = 'manageEvents.html';
         return;
     }
 
-    document.getElementById('eventId').value = eventId;
+    fetchEvent(eventId);
 
-    try { // here load the event data from the database.
-        const response = await fetch(`../PHP/getEvent.php?event_id=${eventId}`); // recall the getEvent.php file to get the event data from the database.
-        const event = await response.json();
+    if (editEventForm) {
+        editEventForm.addEventListener('submit', function(e) {
+            e.preventDefault();
 
-        if (event.error) { // if there is an error e.g. the event doent exist, show an alert.
-            alert(event.error);
-            window.location.href = 'manageEvents.html';
-            return;
-        }
+            // the new value of the event.
+            const formData = new FormData();
+            formData.append('action', 'updateEvent');
+            formData.append('event_id', eventId);
+            formData.append('title', titleInput.value.trim());
+            formData.append('event_date', dateInput.value);
+            formData.append('event_time', timeInput.value);
+            formData.append('location', locationInput.value.trim());
+            formData.append('type', typeInput.value);
+            formData.append('description', descriptionInput.value.trim());
 
-        // event data. 
-        document.getElementById('title').value = event.title;
-        document.getElementById('eventDate').value = event.event_date;
-        document.getElementById('eventTime').value = event.event_time;
-        document.getElementById('location').value = event.location;
-        document.getElementById('type').value = event.type;
-        document.getElementById('description').value = event.description || '';
-    } catch (err) {
-        console.error('Error loading event:', err);
-        alert('Error loading event');
-        window.location.href = 'manageEvents.html';
-    }
-});
-
-// submit the form to update an event in database.
-document.getElementById('editEventForm').addEventListener('submit', async (e) => {
-    e.preventDefault();
-    const formData = new FormData(e.target);
-    const data = Object.fromEntries(formData.entries());
-
-    try {
-        const response = await fetch('../PHP/updateEvent.php', { // use the php file to update the database
-            method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify(data)
+            fetch('../PHP/controller.php', { // send the data to the controller.
+                method: 'POST',
+                body: formData
+            })
+            .then(response => response.json())
+            .then(data => {
+                if (data.status === 'success') {
+                    alert(data.message); // shoe a success message.
+                    window.location.href = 'manageEvents.html'; 
+                } else {
+                    alert('Error: ' + (data.message || 'Unable to update event.'));
+                }
+            })
+            .catch(error => {
+                console.error('Error updating event:', error);
+                alert('Unable to update the event right now.');
+            });
         });
-        const result = await response.json();
-        if (result.success) { // if the update is successful show an alert and go back to the manage events page.
-            alert('Event updated successfully!');
-            window.location.href = 'manageEvents.html';
-        } else {
-            alert('Error: ' + result.message);
-        }
-    } catch (err) {
-        alert('Connection error');
     }
 });
+
+function fetchEvent(eventId) { // function to fetch the event data from the server.
+    const formData = new FormData();
+    formData.append('action', 'getEvent');
+    formData.append('event_id', eventId);
+
+    fetch('../PHP/controller.php', { // call the controller.
+        method: 'POST',
+        body: formData
+    })
+    .then(response => response.json())
+    .then(data => {
+        if (data.status === 'success' && data.event) { // if the event is found.
+            populateForm(data.event); // populate the form with the event data.
+        } else {
+            alert('Error: ' + (data.message || 'Event not found.'));
+            window.location.href = 'manageEvents.html';
+        }
+    })
+    .catch(error => {
+        console.error('Error loading event:', error);
+        alert('Unable to load the event data.');
+        window.location.href = 'manageEvents.html';
+    });
+}
+
+// function to populate the form with the event data.
+function populateForm(event) {
+    const eventIdInput = document.getElementById('eventId'); // all the data of the event.
+    const titleInput = document.getElementById('title');
+    const dateInput = document.getElementById('eventDate');
+    const timeInput = document.getElementById('eventTime');
+    const locationInput = document.getElementById('location');
+    const typeInput = document.getElementById('type');
+    const descriptionInput = document.getElementById('description');
+ 
+    // set the value of the form inputs with the event data.
+    if (eventIdInput) eventIdInput.value = event.id;
+    if (titleInput) titleInput.value = event.title;
+    if (dateInput) dateInput.value = event.event_date;
+    if (timeInput) timeInput.value = event.event_time;
+    if (locationInput) locationInput.value = event.location;
+    if (typeInput) typeInput.value = event.type;
+    if (descriptionInput) descriptionInput.value = event.description;
+}
