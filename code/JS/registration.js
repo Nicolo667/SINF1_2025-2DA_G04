@@ -10,6 +10,15 @@ document.addEventListener('DOMContentLoaded', function() {
     registrationForm.addEventListener('submit', function(e) {
         e.preventDefault();
 
+        const emailValue = document.getElementById('email').value;
+        // check the email format.
+        const emailPattern = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+
+        if (!emailPattern.test(emailValue)) {
+            alert("Please enter a valid email address (e.g., name@example.com). It must contain '@' and a '.' after it.");
+            return; 
+        }
+
         // create a formatData object.
         const formData = new FormData();
         formData.append('action', 'register');
