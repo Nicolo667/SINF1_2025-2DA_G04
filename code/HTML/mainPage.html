@@ -38,10 +38,10 @@
         <section id="events"> <!-- id is useful to connect this section with the header -->
             <h2>Main Events</h2>
             <div class="filter-controls">
-                <button class="filter-btn active" onclick="filterEvents('all')">All</button> <!-- js to shows all or only tradition or music events. -->
+                <button class="filter-btn active" data-filter="all">All</button> <!-- js to shows all or only tradition or music events. -->
                 <!-- this button is default active -->
-                <button class="filter-btn" onclick="filterEvents('Tradition')">Tradition</button>
-                <button class="filter-btn" onclick="filterEvents('Music')">Music</button>
+                <button class="filter-btn" data-filter="Tradition">Tradition</button>
+                <button class="filter-btn" data-filter="Music">Music</button>
             </div>
             <div class="grid" id="events-grid"> </div> <!-- this is useful for the css and js pages is an empty container, js full this container -->
         </section>

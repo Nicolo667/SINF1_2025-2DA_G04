@@ -63,5 +63,17 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         echo json_encode($result);
         exit;
     }
+
+    if ($action === 'getMainEvents') {
+    $result = getAllEvents();
+    echo json_encode($result);
+    exit;
+    }
+
+    if ($action === 'getTents') {
+        $result = getAllTents();
+        echo json_encode($result);
+        exit;
+    }
 }
 ?>

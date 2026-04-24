@@ -86,10 +86,11 @@ h2 { margin-bottom: 2rem; border-left: 6px solid var(--accent); padding-left: 1r
 .filter-btn.active { background: var(--primary); color: var(--white); } /*add the background in filter btn */
 
 .grid { 
-    display: grid; /*arranges all the elements like a grid*/
+    display: grid;
     grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); 
     /* repeats the pattern for all columns and organizes them according to the parameters */
     gap: 2rem; 
+    
 }
 
 .card { /*js create new element of class card */
@@ -152,6 +153,14 @@ footer { text-align: center; padding: 3rem; background: #ddd; font-size: 0.8rem;
     background-color: var(--accent); /* become yellow */
     transform: scale(1.1); /* bigger */
     box-shadow: 0 4px 8px rgba(0,0,0,0.2);
+}
+
+.event-card {
+    background: white;
+    border-radius: 8px;
+    padding: 20px;
+    box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+    margin-bottom: 20px;
 }
 
 

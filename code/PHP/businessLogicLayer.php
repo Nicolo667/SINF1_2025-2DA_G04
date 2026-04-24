@@ -265,4 +265,30 @@ function deleteEvent($data) {
     }
 }
 
+// this function get all the events created by admins from the db.
+function getAllEvents() {
+    global $pdo;
+    try {
+        $sql = "SELECT id, title, description, DATE_FORMAT(event_date, '%Y-%m-%d') AS event_date, event_time, location, type FROM events ORDER BY event_date ASC";
+        $stmt = $pdo->query($sql);
+        $events = $stmt->fetchAll(PDO::FETCH_ASSOC);
+        return ["status" => "success", "events" => $events]; // an arrey of evets.
+    } catch (PDOException $e) {
+        return ["status" => "error", "message" => "DB Error: " . $e->getMessage()];
+    }
+}
+
+// this function get all the tents from db.
+function getAllTents() {
+    global $pdo;
+    try {
+        $sql = "SELECT id, name, faculty_id, location, opening_time, closing_time, description FROM tents ORDER BY name ASC";
+        $stmt = $pdo->query($sql);
+        $tents = $stmt->fetchAll(PDO::FETCH_ASSOC); // return an array with all the tents.
+        return ["status" => "success", "tents" => $tents];
+    } catch (PDOException $e) {
+        return ["status" => "error", "message" => "DB Error: " . $e->getMessage()];
+    }
+}
+
 ?>
