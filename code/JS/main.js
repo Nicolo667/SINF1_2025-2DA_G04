@@ -87,7 +87,7 @@ function renderEventCard(event) { // create the card for the events.
             <h3>${event.title}</h3>
             <div style="margin: 1rem 0; font-size: 0.9rem; color: #666;">
                 <p><strong>📅 Date:</strong> ${event.event_date}</p>
-                <p><strong>⏰ Time:</strong> ${event.event_time}</p>
+                <p><strong>⏰ Time:</strong> ${event.event_time.substring(0,5)}</p>
                 <p><strong>📍 Location:</strong> ${event.location}</p>
             </div>
             <p>${event.description || ''}</p>
