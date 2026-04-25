@@ -77,7 +77,7 @@ function renderFilteredEvents(filter) { // show the events according to the filt
         filtered = allEvents.filter(e => !e.type.toLowerCase().includes('concert') && !e.type.toLowerCase().includes('party'));
     }
 
-    container.innerHTML = filtered.map(e => renderEventCard(e)).join('');
+    container.innerHTML = filtered.map(e => renderEventCard(e)).join(''); 
 }
 
 function renderEventCard(event) { // create the card for the events.

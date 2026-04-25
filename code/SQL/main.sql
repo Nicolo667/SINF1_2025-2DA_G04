@@ -103,4 +103,35 @@ CREATE TABLE IF NOT EXISTS roles (
 -- add the default roles
 INSERT IGNORE INTO roles (role_name) VALUES ('user'), ('admin');
 
+-- add some info and events without the php logic
+INSERT INTO artists (id, name, genre, bio) VALUES 
+(1, 'Dillaz', 'Hip-Hop', 'Renowned Portuguese producer and rapper known for hits like "Alô" and "Mô Boy". A pioneer of national hip-hop.'),
+(2, 'Papillon', 'Hip-Hop/Rap', 'A creative force in Portuguese rap, part of the GROGNation collective and a successful solo artist.'),
+(3, 'Slow J', 'Hip-Hop/Soul', 'A unique artist in the Portuguese scene who blended hip-hop with soul since his 2015 debut.'),
+(4, 'ÁTOA', 'Pop/Rock', 'A popular Portuguese band celebrating their 9th anniversary with the "Prova dei 9" tour.'),
+(5, 'Wet Bed Gang', 'Rap/Hip-Hop', 'A record-breaking collective with millions of views and a massive influence on the younger generation.'),
+(6, 'Deejay Telio', 'Afrobeats/Pop', 'Famous for his "Karanganhola" style and energetic live performances.'),
+(7, 'Quim Barreiros', 'Popular/Pimba', 'The legendary icon of Portuguese popular music, a mandatory presence at every Academic Cortege night.'),
+(8, 'Morad', 'Drill/Rap', 'The Spanish "King of Drill" known for his authentic lyrics reflecting street life in Barcelona.'),
+(9, 'Yasmine', 'Kizomba/Zouk', 'One of the most listened voices in the Lusophony world, famous for hits like "Apaixona".'),
+(10, 'Calum Scott', 'Pop', 'British singer-songwriter who rose to fame on Britain''s Got Talent, famous for "You Are The Reason".'),
+(11, 'Bispo', 'Rap/Pop', 'A versatile rapper with over half a million monthly listeners, presenting his latest album "Entre Nós".'),
+(12, 'Chico da Tina', 'Trap/Folk', 'The "Trapstar" from Viana do Castelo who mixes traditional Minho folklore with modern trap.'),
+(13, 'Veigh', 'Brazilian Trap', 'One of the biggest stars of Brazilian trap music, bringing international vibes to the Queimódromo.'),
+(14, 'Richie Campbell', 'Reggae/Dancehall', 'Portugal''s biggest reggae export, presenting his highly anticipated new music.'),
+(15, 'Xutos & Pontapés', 'Rock', 'The most legendary Portuguese rock band, returning to the Queima stage after 8 years.');
+
+INSERT INTO events (id, title, description, event_date, event_time, location, type, admin_id) VALUES 
+(1, 'Opening: Dillaz & Papillon', 'National Hip-Hop opening night.', '2026-05-02 00:00:00', '22:00:00', 'Queimódromo', 'Concert', 3),
+(2, 'Sunday: Slow J & ÁTOA', 'Soulful Sunday & Pop Vibes.', '2026-05-03 00:00:00', '21:30:00', 'Queimódromo', 'Concert', 3),
+(3, 'Monday: Wet Bed Gang & Telio', 'Urban Monday: Rap & Afrobeats.', '2026-05-04 00:00:00', '22:00:00', 'Queimódromo', 'Concert', 3),
+(4, 'Tuesday: Cortejo Night', 'Traditional Cortejo with Quim Barreiros.', '2026-05-05 00:00:00', '21:00:00', 'Queimódromo', 'Tradition', 3),
+(5, 'Wednesday: Morad & Yasmine', 'Global Rhythms: Kizomba & Drill.', '2026-05-06 00:00:00', '22:00:00', 'Queimódromo', 'Concert', 3),
+(6, 'Thursday: Bispo & Calum Scott', 'Pop & Rap: The Experience.', '2026-05-07 00:00:00', '22:00:00', 'Queimódromo', 'Concert', 3),
+(7, 'Friday: Veigh & Chico da Tina', 'Friday Trap Fever.', '2026-05-08 00:00:00', '22:00:00', 'Queimódromo', 'Concert', 3),
+(8, 'Saturday: Grand Finale', 'Rock & Reggae Legends.', '2026-05-09 00:00:00', '22:30:00', 'Queimódromo', 'Concert', 3);
+
+INSERT INTO event_artists (event_id, artist_id) VALUES 
+(1,1), (1,2), (2,3), (2,4), (3,5), (3,6), (4,7), (4,8), 
+(5,9), (5,10), (6,11), (6,12), (7,13), (7,14), (8,15), (8,16);
 
