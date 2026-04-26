@@ -104,6 +104,23 @@ CREATE TABLE IF NOT EXISTS roles (
 INSERT IGNORE INTO roles (role_name) VALUES ('user'), ('admin');
 
 -- add some info and events without the php logic
+
+INSERT INTO tents (id, name, faculty_id, location, opening_time, closing_time, description) VALUES
+(1, 'FEUP - Tech Demos', 1, 'northern zone B', '09:00:00', '23:00:00', 'Showcasing innovative technology and engineering projects developed by students.'),
+(2, 'FEUP - Workshop Hall', 1, 'northern zone A', '10:00:00', '22:00:00', 'Interactive workshops on programming, CAD design, and new technology,'),
+(3, 'FMUP - Health & Well-being', 2, 'Central Zone A', '09:00:00', '23:00:00', 'Lectures and screenings regarding medicine, clinical research, and healthy habits.'),
+(4, 'FLUP - Literatura & Artes', 3, 'Central Zone B', '10:00:00', '22:00:00', 'Poetry readings, cultural debates, and artistic performances by the Faculty of Arts.'),
+(5, 'FCUP - Living Science', 4, 'East Zone A', '09:00:00', '23:00:00', 'Interactive scientific experiments exploring biology, physics, and chemistry.'),
+(6, 'FDUP - Law & Society', 5, 'East Zone B', '10:00:00', '22:00:00', 'Conferences discussing justice, human rights, and the role of law in modern society.'),
+(7, 'FBAUP - Creativity Hub', 6, 'West Zone A', '11:00:00', '23:30:00', 'Fine arts exhibitions, including design, photography, and live art performances.'),
+(8, 'ICBAS - Biomedical Research', 7, 'Central Zone C', '09:00:00', '22:00:00', 'Presentations of the latest research in life sciences and medicine.'),
+(9, 'FADEUP - Sports & Movement', 8, 'West Zone B', '10:00:00', '23:00:00', 'Sports demonstrations, yoga sessions, and physical activity workshops'),
+(10, 'FEP - Economics & Innovation', 9, 'South Zone A', '09:00:00', '22:00:00', 'Talks on entrepreneurship, market trends, and sustainable business models.'),
+(11, 'FPCEUP - Education & Dev.', 10, 'South Zone B', '10:00:00', '22:00:00', 'Workshops on psychology, educational sciences, and human development.'),
+(12, 'ESENF - Nursing & Care', 11, 'Central Zone D', '09:00:00', '23:00:00', 'Practical nursing demonstrations, public health awareness, and caregiving tips.'),
+(13, 'I3S - Innovation & Future', 12, 'northern zone C', '10:00:00', '22:30:00', 'Showcases of breakthrough health research, startups, and future technologies.'),
+(14, 'FSCH - Social Impact', 13, 'South Zone C', '09:30:00', '22:00:00', 'Social initiatives, volunteer opportunities, and public policy discussions.');
+
 INSERT INTO artists (id, name, genre, bio) VALUES 
 (1, 'Dillaz', 'Hip-Hop', 'Renowned Portuguese producer and rapper known for hits like "Alô" and "Mô Boy". A pioneer of national hip-hop.'),
 (2, 'Papillon', 'Hip-Hop/Rap', 'A creative force in Portuguese rap, part of the GROGNation collective and a successful solo artist.'),
