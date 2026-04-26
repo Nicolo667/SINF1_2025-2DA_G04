@@ -291,4 +291,18 @@ function getAllTents() {
     }
 }
 
+// this function get all the artists from db.
+function getAllArtists() {
+    global $pdo;
+    try {
+        // chose all the artist from de db, with all their info and also order it by the name.
+        $sql = "SELECT id, name, genre, bio FROM artists ORDER BY name ASC";
+        $stmt = $pdo->query($sql); // exxecute the query and obtain the results.
+        $artists = $stmt->fetchAll(PDO::FETCH_ASSOC);  // create an array with all the artists.
+        
+        return ["status" => "success", "artists" => $artists];
+    } catch (PDOException $e) {
+        return ["status" => "error", "message" => "DB Error: " . $e->getMessage()];
+    }
+}
 ?>

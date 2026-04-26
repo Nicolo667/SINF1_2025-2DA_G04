@@ -75,5 +75,12 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         echo json_encode($result);
         exit;
     }
+
+    // get the artist. 
+    if ($action === 'getArtists') {
+    $result = getAllArtists();
+    echo json_encode($result);
+    exit;
+}
 }
 ?>
