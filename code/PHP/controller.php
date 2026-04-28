@@ -68,7 +68,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $result = getAllEvents($_POST); //if $_POST is an empty variable the page will fill it with all the events.
     echo json_encode($result); 
     exit;
-}
+    }
 
     if ($action === 'getTents') {
         $result = getAllTents();
