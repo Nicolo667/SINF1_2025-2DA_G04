@@ -22,7 +22,7 @@ function loadMainPageData() {
 
     // upload the events in the main page.
     const eventFormData = new FormData();
-    eventFormData.append('action', 'getMainEvents');
+    eventFormData.append('action', 'getAllEvents'); // call the new controller function. 
 
     fetch('../PHP/controller.php', { method: 'POST', body: eventFormData }) //call the php controller to get the events.
     .then(r => r.json())
@@ -81,8 +81,9 @@ function renderFilteredEvents(filter) { // show the events according to the filt
 }
 
 function renderEventCard(event) { // create the card for the events.
+    // change the first line, when we click on the card we go to the event own page.
     return `
-        <article class="card">
+        <article class="card" onclick="window.location.href='eventDetails.html?id=${event.id}'" style="cursor: pointer;"> 
             <div class="category">${event.type}</div>
             <h3>${event.title}</h3>
             <div style="margin: 1rem 0; font-size: 0.9rem; color: #666;">

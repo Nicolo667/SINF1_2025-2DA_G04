@@ -154,6 +154,7 @@ function getAdminEvents() {
 }
 
 // function that get an event by the id -> useful for the edit page, to get one specific event.
+// we can't use this function to 'create' the event page cause only the admin can see the event.
 function getEventById($data) {
     global $pdo;
 
@@ -266,13 +267,39 @@ function deleteEvent($data) {
 }
 
 // this function get all the events created by admins from the db.
-function getAllEvents() {
+// now we add the id cause we need it for the singol event page.
+function getAllEvents($data = null) {
     global $pdo;
     try {
-        $sql = "SELECT id, title, description, DATE_FORMAT(event_date, '%Y-%m-%d') AS event_date, event_time, location, type FROM events ORDER BY event_date ASC";
-        $stmt = $pdo->query($sql);
-        $events = $stmt->fetchAll(PDO::FETCH_ASSOC);
-        return ["status" => "success", "events" => $events]; // an arrey of evets.
+        $eventId = isset($data['id']) ? (int)$data['id'] : null; // if we have the id we check for the correct event.
+
+        if ($eventId) {
+            // take the details of the event.
+            $sql = "SELECT id, title, description, DATE_FORMAT(event_date, '%Y-%m-%d') AS event_date, event_time, location, type 
+                    FROM events WHERE id = ?";
+            $stmt = $pdo->prepare($sql);
+            $stmt->execute([$eventId]);
+            $event = $stmt->fetch(PDO::FETCH_ASSOC);
+
+            if (!$event) return ["status" => "error", "message" => "Event not found"];
+
+            // take the artist of the event
+            $sqlArt = "SELECT a.id, a.name, a.genre, a.bio 
+                       FROM artists a 
+                       JOIN event_artists ea ON a.id = ea.artist_id 
+                       WHERE ea.event_id = ?";
+            $stmtArt = $pdo->prepare($sqlArt);
+            $stmtArt->execute([$eventId]);
+            $artists = $stmtArt->fetchAll(PDO::FETCH_ASSOC);
+
+            return ["status" => "success", "event" => $event, "artists" => $artists];
+        } else {
+            // if there isn't an id we take all the events to show them in the main page 
+            $sql = "SELECT id, title, description, DATE_FORMAT(event_date, '%Y-%m-%d') AS event_date, event_time, location, type FROM events ORDER BY event_date ASC";
+            $stmt = $pdo->query($sql);
+            $events = $stmt->fetchAll(PDO::FETCH_ASSOC);
+            return ["status" => "success", "events" => $events];
+        }
     } catch (PDOException $e) {
         return ["status" => "error", "message" => "DB Error: " . $e->getMessage()];
     }
@@ -305,4 +332,5 @@ function getAllArtists() {
         return ["status" => "error", "message" => "DB Error: " . $e->getMessage()];
     }
 }
+
 ?>

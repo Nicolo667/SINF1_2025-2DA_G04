@@ -64,11 +64,11 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         exit;
     }
 
-    if ($action === 'getMainEvents') {
-    $result = getAllEvents();
-    echo json_encode($result);
+    if ($action === 'getAllEvents') {
+    $result = getAllEvents($_POST); //if $_POST is an empty variable the page will fill it with all the events.
+    echo json_encode($result); 
     exit;
-    }
+}
 
     if ($action === 'getTents') {
         $result = getAllTents();
@@ -81,6 +81,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $result = getAllArtists();
     echo json_encode($result);
     exit;
+
 }
 }
 ?>
