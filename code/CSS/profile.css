@@ -134,3 +134,17 @@
 .btn-admin.import:hover {
     background-color: #5a32a3;
 }
+
+.btn-delete {
+    background-color: #ff4d4d;
+    color: white;
+    border: none;
+    padding: 8px 12px;
+    border-radius: 4px;
+    cursor: pointer;
+    transition: background 0.3s;
+}
+
+.btn-delete:hover {
+    background-color: #cc0000;
+}

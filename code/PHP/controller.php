@@ -81,6 +81,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $result = getAllArtists();
     echo json_encode($result);
     exit;
+    }
 
     if ($action === 'addToAgenda') {
     echo json_encode(addToAgenda($_POST));
@@ -97,6 +98,5 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         exit;
     }
 
-}
 }
 ?>

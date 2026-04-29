@@ -10,6 +10,38 @@ document.addEventListener('DOMContentLoaded', () => {
         console.error("No id found in URL");
         document.getElementById('event-detail-content').innerHTML = "<p>Error: Event ID missing.</p>";
     }
+
+    // logic for the registration to an event.
+    const registerBtn = document.getElementById('btn-register');
+    const role = localStorage.getItem('userRole');
+
+    if (registerBtn) {
+        registerBtn.addEventListener('click', () => {
+            if (role !== 'user') {
+                alert("Only users can register for events.");
+                return;
+            }
+
+            const formData = new FormData();
+            formData.append('action', 'addToAgenda');
+            formData.append('event_id', eventId);
+
+            fetch('../PHP/controller.php', {
+                method: 'POST',
+                body: formData
+            })
+            .then(response => response.json())
+            .then(data => {
+                if (data.status === 'success') {
+                    alert("Registered successfully!");
+                    window.location.href = 'profile.html'; 
+                } else {
+                    alert(data.message);
+                }
+            })
+            .catch(error => console.error("Error:", error));
+        });
+    }
 });
 
 // take all the info of an event from the db.
