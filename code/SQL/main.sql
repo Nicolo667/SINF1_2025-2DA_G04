@@ -105,6 +105,9 @@ INSERT IGNORE INTO roles (role_name) VALUES ('user'), ('admin');
 
 -- add some info and events without the php logic
 
+INSERT INTO users (name, username, first_name, last_name, birth_date, email, password_hash, role)
+VALUES ('Admin Queima', 'admin2026', 'Admin', 'Project', '1990-01-01', 'admin@queima.com', '$2y$10$8u.9E9v2B5A5Y5xQ5e5u5O5e5u5O5e5u5O5e5u5O5e5u5O5e5u5O','admin');
+
 INSERT INTO tents (id, name, faculty_id, location, opening_time, closing_time, description) VALUES
 (1, 'FEUP - Tech Demos', 1, 'northern zone B', '09:00:00', '23:00:00', 'Showcasing innovative technology and engineering projects developed by students.'),
 (2, 'FEUP - Workshop Hall', 1, 'northern zone A', '10:00:00', '22:00:00', 'Interactive workshops on programming, CAD design, and new technology,'),
