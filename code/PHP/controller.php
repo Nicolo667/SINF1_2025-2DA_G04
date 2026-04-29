@@ -82,6 +82,21 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     echo json_encode($result);
     exit;
 
+    if ($action === 'addToAgenda') {
+    echo json_encode(addToAgenda($_POST));
+    exit;
+    }
+
+    if ($action === 'removeFromAgenda') {
+        echo json_encode(removeFromAgenda($_POST));
+        exit;
+    }
+    
+    if ($action === 'getUserAgenda') {
+        echo json_encode(getUserAgenda());
+        exit;
+    }
+
 }
 }
 ?>

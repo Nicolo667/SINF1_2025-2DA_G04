@@ -333,4 +333,56 @@ function getAllArtists() {
     }
 }
 
+// function to add an event to the personal agenda. 
+function addToAgenda($data) {
+    global $pdo;
+    if (session_status() === PHP_SESSION_NONE) session_start();
+    if (!isset($_SESSION['user_id'])) return ["status" => "error", "message" => "Devi effettuare il login"];
+
+    try {
+        $sql = "INSERT INTO user_agenda (user_id, event_id) VALUES (?, ?)";
+        $stmt = $pdo->prepare($sql);
+        $stmt->execute([$_SESSION['user_id'], $data['event_id']]);
+        return ["status" => "success", "message" => "Evento aggiunto all'agenda!"];
+    } catch (PDOException $e) {
+        if ($e->getCode() == 23000) return ["status" => "error", "message" => "Evento già presente in agenda"];
+        return ["status" => "error", "message" => "Errore del database"];
+    }
+}
+
+// function to remove an eventi from the PA.
+function removeFromAgenda($data) {
+    global $pdo;
+    if (session_status() === PHP_SESSION_NONE) session_start();
+    try {
+        $sql = "DELETE FROM user_agenda WHERE user_id = ? AND event_id = ?";
+        $stmt = $pdo->prepare($sql);
+        $stmt->execute([$_SESSION['user_id'], $data['event_id']]);
+        return ["status" => "success", "message" => "Evento rimosso"];
+    } catch (PDOException $e) {
+        return ["status" => "error", "message" => "Errore durante la rimozione"];
+    }
+}
+
+//function to get the sorted agenda.
+function getUserAgenda() {
+    global $pdo;
+    if (session_status() === PHP_SESSION_NONE) session_start();
+    $userId = $_SESSION['user_id'];
+
+    try {
+        // Selezioniamo gli eventi ordinandoli per data e ora
+        $sql = "SELECT e.*, DATE_FORMAT(e.event_date, '%Y-%m-%d') as event_date 
+                FROM events e 
+                JOIN user_agenda ua ON e.id = ua.event_id 
+                WHERE ua.user_id = ? 
+                ORDER BY e.event_date ASC, e.event_time ASC";
+        $stmt = $pdo->prepare($sql);
+        $stmt->execute([$userId]);
+        return ["status" => "success", "events" => $stmt->fetchAll(PDO::FETCH_ASSOC)];
+    } catch (PDOException $e) {
+        return ["status" => "error", "message" => "Errore nel caricamento agenda"];
+    }
+}
+
 ?>
