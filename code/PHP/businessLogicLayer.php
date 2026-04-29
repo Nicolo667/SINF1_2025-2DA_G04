@@ -337,16 +337,16 @@ function getAllArtists() {
 function addToAgenda($data) {
     global $pdo;
     if (session_status() === PHP_SESSION_NONE) session_start();
-    if (!isset($_SESSION['user_id'])) return ["status" => "error", "message" => "Devi effettuare il login"];
-
+    if (!isset($_SESSION['user_id'])) return ["status" => "error", "message" => "you must be logged in"];
     try {
         $sql = "INSERT INTO user_agenda (user_id, event_id) VALUES (?, ?)";
         $stmt = $pdo->prepare($sql);
         $stmt->execute([$_SESSION['user_id'], $data['event_id']]);
-        return ["status" => "success", "message" => "Evento aggiunto all'agenda!"];
+        return ["status" => "success", "message" => "Event added in agenda"];
     } catch (PDOException $e) {
-        if ($e->getCode() == 23000) return ["status" => "error", "message" => "Evento già presente in agenda"];
-        return ["status" => "error", "message" => "Errore del database"];
+        // 23000 is the code for duplocate data.
+        if ($e->getCode() == 23000) return ["status" => "error", "message" => "Event aready in agenda."];
+        return ["status" => "error", "message" => "error during the addition."];
     }
 }
 
@@ -358,9 +358,9 @@ function removeFromAgenda($data) {
         $sql = "DELETE FROM user_agenda WHERE user_id = ? AND event_id = ?";
         $stmt = $pdo->prepare($sql);
         $stmt->execute([$_SESSION['user_id'], $data['event_id']]);
-        return ["status" => "success", "message" => "Evento rimosso"];
+        return ["status" => "success", "message" => "removed event"];
     } catch (PDOException $e) {
-        return ["status" => "error", "message" => "Errore durante la rimozione"];
+        return ["status" => "error", "message" => "Error during the remotion"];
     }
 }
 
@@ -381,7 +381,7 @@ function getUserAgenda() {
         $stmt->execute([$userId]);
         return ["status" => "success", "events" => $stmt->fetchAll(PDO::FETCH_ASSOC)];
     } catch (PDOException $e) {
-        return ["status" => "error", "message" => "Errore nel caricamento agenda"];
+        return ["status" => "error", "message" => "Error durnig uploading agenda: " . $e->getMessage()];
     }
 }
 
