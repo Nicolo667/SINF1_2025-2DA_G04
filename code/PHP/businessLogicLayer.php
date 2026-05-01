@@ -385,4 +385,36 @@ function getUserAgenda() {
     }
 }
 
+function updateUserProfile($data) {
+    global $pdo;
+    if (session_status() === PHP_SESSION_NONE) session_start();
+    
+    if (!isset($_SESSION['user_id'])) {
+        return ["status" => "error", "message" => "You must be logged in!"];
+    }
+
+    try {
+        // Updated to include username
+        $sql = "UPDATE users 
+                SET first_name = ?, last_name = ?, email = ?, username = ? 
+                WHERE id = ?";
+        
+        $stmt = $pdo->prepare($sql);
+        $stmt->execute([
+            $data['first_name'], 
+            $data['last_name'], 
+            $data['email'], 
+            $data['username'], 
+            $_SESSION['user_id']
+        ]);
+
+        return ["status" => "success", "message" => "Profile updated successfully!"];
+    } catch (PDOException $e) {
+        // Handle potential duplicate username error
+        if ($e->getCode() == 23000) {
+            return ["status" => "error", "message" => "Username or Email already taken."];
+        }
+        return ["status" => "error", "message" => "Update error: " . $e->getMessage()];
+    }
+}
 ?>

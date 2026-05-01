@@ -133,4 +133,6 @@ window.removeRegistration = function(eventId) {
             alert(data.message);
         }
     });
+
+    
 };

@@ -148,3 +148,57 @@
 .btn-delete:hover {
     background-color: #cc0000;
 }
+
+.btn-edit-profile {
+    background-color: transparent;
+    border: 1px solid var(--accent);
+    color: var(--accent);
+    padding: 8px 16px;
+    border-radius: 5px;
+    cursor: pointer;
+    font-size: 0.9rem;
+    transition: all 0.3s;
+}
+
+.btn-edit-profile:hover {
+    background-color: var(--accent);
+    color: white;
+}
+
+.edit-profile-wrapper {
+    max-width: 600px;
+    margin: 2rem auto;
+    padding: 0 1rem;
+}
+
+.form-group {
+    margin-bottom: 1.5rem;
+}
+
+.form-group label {
+    display: block;
+    margin-bottom: 0.5rem;
+    font-weight: 600;
+    color: var(--primary);
+}
+
+.form-input {
+    width: 100%;
+    padding: 0.8rem;
+    border: 1px solid #ddd;
+    border-radius: 5px;
+    font-size: 1rem;
+    font-family: inherit;
+    transition: 0.3s;
+}
+
+.form-input:focus {
+    outline: 2px solid var(--accent);
+    border-color: transparent;
+}
+
+.form-actions {
+    display: flex;
+    gap: 10px;
+    margin-top: 2rem;
+}

@@ -98,5 +98,15 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         exit;
     }
 
+    if ($action === 'updateProfile') {
+        if (isset($_POST['first_name'], $_POST['last_name'], $_POST['email'], $_POST['username'])) {
+            $result = updateUserProfile($_POST);
+            echo json_encode($result);
+        } else {
+            echo json_encode(["status" => "error", "message" => "Missing data. All fields are required."]);
+        }
+        exit;
+    }
+
 }
 ?>
