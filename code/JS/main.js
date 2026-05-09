@@ -11,6 +11,20 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     }
 
+    // Gestione tasto Ricerca
+    const searchBtn = document.getElementById('searchBtn');
+    if (searchBtn) {
+        searchBtn.addEventListener('click', performSearch);
+    }
+
+    // Gestione tasto "Invio" nella barra di ricerca
+    const searchInput = document.getElementById('eventSearch');
+    if (searchInput) {
+        searchInput.addEventListener('keypress', (e) => {
+            if (e.key === 'Enter') performSearch();
+        });
+    }
+
     loadMainPageData(); // create the structure of main page.
 });
 
@@ -51,6 +65,7 @@ function loadMainPageData() {
         }
     })
     .catch(err => console.error("Errore tende:", err));
+
 }
 
 function setupFilters() { // set up the filter botton.
@@ -112,4 +127,55 @@ function renderTentCard(tent) { // create the card for the tents.
             </div>
         </article>
     `;
+}
+
+function performSearch() {
+    const input = document.getElementById('eventSearch');
+    if (!input) return;
+
+    const searchTerm = input.value.toLowerCase().trim();
+    if (searchTerm === "") return;
+
+    // important to reset all the filter cause if is not like this the bar couldn't find some events
+    renderFilteredEvents('all'); 
+    
+    // btn All active
+    const buttons = document.querySelectorAll('.filter-btn');
+    buttons.forEach(btn => {
+        btn.classList.remove('active');
+        if (btn.innerText.toLowerCase() === 'all') {
+            btn.classList.add('active');
+        }
+    });
+
+    const allCards = document.querySelectorAll('article.card');
+    let found = false;
+
+    for (let card of allCards) {
+        const titleElement = card.querySelector('h3');
+        if (!titleElement) continue;
+
+        const title = titleElement.innerText.toLowerCase();
+
+        if (title.includes(searchTerm)) {
+            card.scrollIntoView({ behavior: 'smooth', block: 'center' });
+
+            // change the effect of the card when finds it
+            card.style.transition = "all 0.4s ease";
+            card.style.outline = "4px solid #f5c518"; 
+            card.style.transform = "scale(1.02)";
+            
+            setTimeout(() => {
+                card.style.outline = "none";
+                card.style.transform = "scale(1)";
+            }, 3000);
+
+            found = true;
+            break; // stop when find the first match
+        }
+    }
+
+    if (!found) {
+        alert("No results found for '" + searchTerm + "'");
+    }
 }
