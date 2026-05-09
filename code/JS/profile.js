@@ -69,6 +69,9 @@ document.addEventListener('DOMContentLoaded', () => {
     if (typeof loadEvents === "function") {
         loadEvents();
     }
+
+    checkUpcomingNotifications();
+
 });
 
 function loadEvents() {
@@ -133,6 +136,46 @@ window.removeRegistration = function(eventId) {
             alert(data.message);
         }
     });
-
-    
 };
+
+function checkUpcomingNotifications() {
+
+    const formData = new FormData();
+    formData.append('action', 'checkUpcomingEvents');
+
+    // call the controller
+    fetch('../PHP/controller.php', {
+        method: 'POST',
+        body: formData
+    })
+    .then(r => {
+        if (!r.ok) {
+            throw new Error("errer" +  r.status);
+        }
+        return r.json();
+    })
+
+    .then(data => {
+        console.log("Data received:", data);
+
+        // create the alert
+        if (data.status === 'success') {
+            if (data.events && data.events.length > 0) {
+                let message = "UPCOMING EVENTS (Next 48h):\n\n";
+                data.events.forEach(ev => {
+                    message += `- ${ev.title} at ${ev.event_date}\n`;
+                });
+                alert(message);
+            } else {
+                // if there arent events in the next 48 h
+                console.log("DEBUG: No events found for this user in the next 48h.");
+            }
+        } else {
+            alert("Server Error: " + data.message);
+        }
+    })
+    .catch(err => {
+        console.error("Fetch error:", err);
+        alert("Connection Error: " + err.message);
+    });
+}

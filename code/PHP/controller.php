@@ -1,5 +1,6 @@
 <?php
 // this file recieve requests and call the business logic layer functions.
+session_start();
 error_reporting(0);
 require_once 'businessLogicLayer.php';
 header('Content-Type: application/json');
@@ -107,6 +108,16 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         }
         exit;
     }
+
+    if ($action === 'checkUpcomingEvents') {
+        if (session_status() === PHP_SESSION_NONE) session_start();
+            if (isset($_SESSION['user_id'])) {
+                echo json_encode(getUpcomingEvents($_SESSION['user_id']));
+            } else {
+                echo json_encode(["status" => "error", "message" => "Not logged in"]);
+            }
+            exit;
+}
 
 }
 ?>

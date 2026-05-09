@@ -417,4 +417,27 @@ function updateUserProfile($data) {
         return ["status" => "error", "message" => "Update error: " . $e->getMessage()];
     }
 }
+
+// function to see the upcoming events.
+function getUpcomingEvents($userId) {
+    global $pdo;
+    try {
+        $sql = "SELECT e.title, DATE(e.event_date) as clean_date, e.event_time 
+                FROM events e
+                JOIN user_agenda a ON e.id = a.event_id
+                WHERE a.user_id = ? 
+                -- we should 'clean' the event_date cause there is a time -> 00:00:00
+                AND STR_TO_DATE(CONCAT(DATE(e.event_date), ' ', e.event_time), '%Y-%m-%d %H:%i:%s') >= NOW()
+                AND STR_TO_DATE(CONCAT(DATE(e.event_date), ' ', e.event_time), '%Y-%m-%d %H:%i:%s') <= DATE_ADD(NOW(), INTERVAL 48 HOUR)
+                ORDER BY clean_date ASC, e.event_time ASC";
+        
+        $stmt = $pdo->prepare($sql);
+        $stmt->execute([$userId]);
+        $events = $stmt->fetchAll(PDO::FETCH_ASSOC);
+        
+        return ["status" => "success", "events" => $events];
+    } catch (PDOException $e) {
+        return ["status" => "error", "message" => $e->getMessage()];
+    }
+}
 ?>
