@@ -117,7 +117,17 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 echo json_encode(["status" => "error", "message" => "Not logged in"]);
             }
             exit;
-}
+    }
+
+    if ($action === 'importArtistsCsv') {
+        if (isset($_FILES['csvFile']) && $_FILES['csvFile']['error'] === UPLOAD_ERR_OK) {
+            $result = importArtistsFromCSV($_FILES['csvFile']['tmp_name']);
+            echo json_encode($result);
+        } else {
+            echo json_encode(["status" => "error", "message" => "Error during uploading"]);
+        }
+        exit;
+    }
 
 }
 ?>

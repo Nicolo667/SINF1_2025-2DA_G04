@@ -72,6 +72,39 @@ document.addEventListener('DOMContentLoaded', () => {
 
     checkUpcomingNotifications();
 
+    // import csv file.
+    const importBtn = document.getElementById('importCsvBtn');
+    const fileInput = document.getElementById('csvFileInput');
+
+    // open the selector for file 
+    if (importBtn && fileInput) {
+        importBtn.addEventListener('click', () => fileInput.click());
+
+        // when a user select a file
+        fileInput.addEventListener('change', function() {
+            if (this.files && this.files[0]) {
+                const formData = new FormData();
+                formData.append('action', 'importArtistsCsv');
+                formData.append('csvFile', this.files[0]);
+
+                // call the controller.
+                fetch('../PHP/controller.php', {
+                    method: 'POST',
+                    body: formData
+                })
+                .then(r => r.json())
+                .then(data => {
+                    alert(data.message);
+                    fileInput.value = ''; // reset the imput
+                })
+                .catch(err => {
+                    console.error("Error:", err);
+                    alert("error during upload.");
+                });
+            }
+        });
+    }
+
 });
 
 function loadEvents() {

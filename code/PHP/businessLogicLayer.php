@@ -440,4 +440,48 @@ function getUpcomingEvents($userId) {
         return ["status" => "error", "message" => $e->getMessage()];
     }
 }
+
+// function to upoad artist from a csv file
+function importArtistsFromCSV($filePath) {
+    global $pdo;
+    $insertedCount = 0;
+    $errorCount = 0;
+
+    // open the file in a reading way
+    if (($handle = fopen($filePath, "r")) !== FALSE) {
+
+        try {
+            $pdo->beginTransaction();
+
+            // prepare the request (query)
+            $sql = "INSERT INTO artists (name, genre, bio) VALUES (?, ?, ?)";
+            $stmt = $pdo->prepare($sql);
+
+            // put the data in db.
+            while (($data = fgetcsv($handle, 1000, ",")) !== FALSE) {
+                if (count($data) >= 3) {
+                    if ($stmt->execute([$data[0], $data[1], $data[2]])) {
+                        $insertedCount++;
+                    } else {
+                        $errorCount++;
+                    }
+                }
+            }
+
+            $pdo->commit();
+            fclose($handle);
+            return [
+                // print in an alert the number of the new artists added in the db.
+                "status" => "success", 
+                "message" => "import csv: $insertedCount new artists. Errors: $errorCount."
+            ];
+
+        } catch (Exception $e) {
+            $pdo->rollBack();
+            fclose($handle);
+            return ["status" => "error", "message" => "Error in DB: " . $e->getMessage()];
+        }
+    }
+    return ["status" => "error", "message" => "Impossible to open CSV file."];
+}
 ?>
