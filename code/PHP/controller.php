@@ -129,5 +129,16 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         exit;
     }
 
+    if ($action === 'exportUserAgenda') {
+        if (session_status() === PHP_SESSION_NONE) session_start();
+        
+        if (isset($_SESSION['user_id'])) {
+            exportUserAgendaToCSV($_SESSION['user_id']);
+        } else {
+            echo "Error: Not logged in.";
+        }
+        exit;
+    }
+
 }
 ?>

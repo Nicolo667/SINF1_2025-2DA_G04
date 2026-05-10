@@ -484,4 +484,59 @@ function importArtistsFromCSV($filePath) {
     }
     return ["status" => "error", "message" => "Impossible to open CSV file."];
 }
+
+// function to export the personal agenda
+function exportUserAgendaToCSV($userId) {
+    global $pdo;
+    
+    try {
+        // Query to take all the events and the artist of that agenda
+        $sql = "SELECT e.title, e.event_date, e.event_time, e.location, 
+                       GROUP_CONCAT(art.name SEPARATOR ' & ') as artists
+                FROM events e
+                JOIN user_agenda a ON e.id = a.event_id
+                LEFT JOIN event_artists ea ON e.id = ea.event_id
+                LEFT JOIN artists art ON ea.artist_id = art.id
+                WHERE a.user_id = ?
+                GROUP BY e.id
+                ORDER BY e.event_date ASC";
+        
+        $stmt = $pdo->prepare($sql);
+        $stmt->execute([$userId]);
+        $rows = $stmt->fetchAll(PDO::FETCH_ASSOC);
+
+        // prepare the download
+        $filename = "my_agenda_Queima26" . ".csv"; // name of file
+        header('Content-Type: text/csv; charset=utf-8');
+        header('Content-Disposition: attachment; filename=' . $filename);
+
+        // file output
+        $output = fopen('php://output', 'w');
+
+        // problem for the caracter with '
+        fprintf($output, chr(0xEF).chr(0xBB).chr(0xBF));
+
+        // header csv file.
+        fputcsv($output, ['Event Title', 'Date', 'Time', 'Location', 'Artists']);
+
+        // fill the line
+        foreach ($rows as $row) {
+            $onlyDate = substr($row['event_date'], 0, 10); //only the first 10 character of a date
+
+            fputcsv($output, [
+                $row['title'],
+                $onlyDate,
+                $row['event_time'],
+                $row['location'],
+                $row['artists'] ?: 'No artists assigned'
+            ]);
+        }
+
+        fclose($output);
+        exit;
+
+    } catch (PDOException $e) {
+        die("Error exporting agenda: " . $e->getMessage());
+    }
+}
 ?>

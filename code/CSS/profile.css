@@ -202,3 +202,52 @@
     gap: 10px;
     margin-top: 2rem;
 }
+
+.header-actions {
+    display: flex;
+    gap: 12px;
+    align-items: center;
+}
+
+/*both btn in the contaner are the same (e.g. have the same size)*/
+#exportAgendaBtn, .btn-add-event {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    
+    height: 45px; 
+    padding: 0 20px;
+    
+    border-radius: 8px;
+    font-weight: 700;
+    font-size: 0.9rem;
+    text-decoration: none;
+    border: none;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    box-sizing: border-box;
+    white-space: nowrap; 
+}
+
+
+#exportAgendaBtn {
+    background-color: #0a1931; 
+    color: #f5c518;          
+    border: 2px solid #0a1931; 
+}
+
+#exportAgendaBtn:hover {
+    background-color: #1a2a44;
+    transform: translateY(-2px);
+}
+
+
+.btn-add-event {
+    background-color: #f5c518;
+    color: #0a1931;            
+}
+
+.btn-add-event:hover {
+    background-color: #e0b415;
+    transform: translateY(-2px);
+}

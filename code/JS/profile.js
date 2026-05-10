@@ -105,6 +105,27 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     }
 
+    //function for the export btn (for the user agenda)
+    const exportBtn = document.getElementById('exportAgendaBtn');
+    if (exportBtn) {
+        exportBtn.addEventListener('click', () => {
+            // create a form for the download
+            const form = document.createElement('form');
+            form.method = 'POST';
+            form.action = '../PHP/controller.php';
+
+            const actionInput = document.createElement('input');
+            actionInput.type = 'hidden';
+            actionInput.name = 'action';
+            actionInput.value = 'exportUserAgenda';
+
+            form.appendChild(actionInput);
+            document.body.appendChild(form);
+            form.submit();
+            document.body.removeChild(form);
+        });
+    }
+
 });
 
 function loadEvents() {
