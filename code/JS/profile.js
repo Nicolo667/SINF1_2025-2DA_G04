@@ -220,9 +220,6 @@ function checkUpcomingNotifications() {
                     message += `- ${ev.title} at ${ev.event_date}\n`;
                 });
                 alert(message);
-            } else {
-                // if there arent events in the next 48 h
-                console.log("DEBUG: No events found for this user in the next 48h.");
             }
         } else {
             alert("Server Error: " + data.message);

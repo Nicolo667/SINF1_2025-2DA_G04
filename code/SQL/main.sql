@@ -75,14 +75,11 @@ CREATE TABLE IF NOT EXISTS event_artists (
 CREATE TABLE IF NOT EXISTS ratings (
     id INT AUTO_INCREMENT PRIMARY KEY,
     user_id INT NOT NULL,
-    event_id INT DEFAULT NULL, -- could be null if the rating is for a tent
-    tent_id INT DEFAULT NULL,  -- same if the rating is for an event
+    event_id INT DEFAULT NULL,
     score INT CHECK (score >= 1 AND score <= 5),
-    comment TEXT,
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
     FOREIGN KEY (user_id) REFERENCES users(id) ON DELETE CASCADE,
-    FOREIGN KEY (event_id) REFERENCES events(id) ON DELETE CASCADE,
-    FOREIGN KEY (tent_id) REFERENCES tents(id) ON DELETE CASCADE
+    FOREIGN KEY (event_id) REFERENCES events(id) ON DELETE CASCADE
 );
 
 -- table for the user agenda
