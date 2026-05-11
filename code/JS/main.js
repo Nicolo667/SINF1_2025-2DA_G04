@@ -40,6 +40,7 @@ function loadMainPageData(sortOrder = 'date_asc') {
     const tentsContainer = document.getElementById('tents-grid');
 
     if (eventsContainer) eventsContainer.innerHTML = ''; // clean the container before doing all the operations.
+    if (tentsContainer) tentsContainer.innerHTML = ''; // clean also the tents container
 
     // upload the events in the main page.
     const eventFormData = new FormData();
@@ -63,6 +64,7 @@ function loadMainPageData(sortOrder = 'date_asc') {
     // upload the tents in the main page.
     const tentFormData = new FormData();
     tentFormData.append('action', 'getTents');
+    tentFormData.append('sort', sortOrder);
 
     fetch('../PHP/controller.php', { method: 'POST', body: tentFormData }) // take the tents from the db (call the controller).
     .then(r => r.json())

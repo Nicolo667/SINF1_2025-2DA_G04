@@ -323,13 +323,23 @@ function getAllEvents($data = null) {
 }
 
 // this function get all the tents from db.
-function getAllTents() {
+function getAllTents($sort = 'name_asc') {
     global $pdo;
     try {
+        $orderBy = "t.name ASC"; // Default
+
+        if ($sort === 'rating_desc') {
+            $orderBy = "avg_rating DESC, t.name ASC";
+        } elseif ($sort === 'date_asc') { // cause the tent hasn't a date we use opening time
+            $orderBy = "t.opening_time ASC"; 
+        }
+
         // take aso the avg of the rates
         $sql = "SELECT t.*, 
                 (SELECT ROUND(AVG(score), 1) FROM ratings WHERE tent_id = t.id) as avg_rating 
-                FROM tents t ORDER BY t.name ASC";
+                FROM tents t 
+                ORDER BY $orderBy";
+                
         $stmt = $pdo->query($sql);
         $tents = $stmt->fetchAll(PDO::FETCH_ASSOC);
         return ["status" => "success", "tents" => $tents];

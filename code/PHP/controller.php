@@ -72,8 +72,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     }
 
     if ($action === 'getTents') {
-        $result = getAllTents();
-        echo json_encode($result);
+        $sort = $_POST['sort'] ?? 'name_asc';
+        echo json_encode(getAllTents($sort));
         exit;
     }
 
@@ -157,6 +157,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         echo json_encode(saveTentRating($userId, $tentId, $score));
         exit;
     }
+
+
 
 }
 ?>
