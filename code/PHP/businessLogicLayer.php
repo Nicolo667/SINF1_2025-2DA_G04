@@ -60,10 +60,11 @@ function loginUser($data) {
             }
             $_SESSION['user_id'] = $user['id'];
             $_SESSION['user_role'] = $user['role'];
-            $_SESSION['user_name'] = $user['name'];
+            $_SESSION['user_name'] = $user['first_name'];
 
             return [
                "status" => "success",
+               "id" => $user['id'],
                 "role" => $user['role'],
                 "username" => $user['username'],
                 "firstName" => $user['first_name'], 
@@ -325,9 +326,12 @@ function getAllEvents($data = null) {
 function getAllTents() {
     global $pdo;
     try {
-        $sql = "SELECT id, name, faculty_id, location, opening_time, closing_time, description FROM tents ORDER BY name ASC";
+        // take aso the avg of the rates
+        $sql = "SELECT t.*, 
+                (SELECT ROUND(AVG(score), 1) FROM ratings WHERE tent_id = t.id) as avg_rating 
+                FROM tents t ORDER BY t.name ASC";
         $stmt = $pdo->query($sql);
-        $tents = $stmt->fetchAll(PDO::FETCH_ASSOC); // return an array with all the tents.
+        $tents = $stmt->fetchAll(PDO::FETCH_ASSOC);
         return ["status" => "success", "tents" => $tents];
     } catch (PDOException $e) {
         return ["status" => "error", "message" => "DB Error: " . $e->getMessage()];
@@ -609,6 +613,26 @@ function getAverageRating($eventId) {
     $stmt->execute([$eventId]);
     $result = $stmt->fetch(PDO::FETCH_ASSOC);
     return $result['average'] ?? 0;
+}
+
+// function to save tents rates
+function saveTentRating($userId, $tentId, $score) {
+    global $pdo;
+    try {
+        $sql = "INSERT INTO ratings (user_id, tent_id, event_id, score) 
+                VALUES (?, ?, NULL, ?)
+                ON DUPLICATE KEY UPDATE score = VALUES(score)";
+        
+        $stmt = $pdo->prepare($sql);
+        $stmt->execute([$userId, $tentId, $score]);
+        
+        return [
+            "status" => "success", 
+            "message" => "Vote saved successfully! Your previous vote has been updated."
+        ];
+    } catch (PDOException $e) {
+        return ["status" => "error", "message" => "Error in DB: " . $e->getMessage()];
+    }
 }
 
 ?>

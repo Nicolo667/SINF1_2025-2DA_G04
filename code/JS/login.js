@@ -22,8 +22,10 @@ document.addEventListener('DOMContentLoaded', () => {
                 return response.json();
             })
             .then(data => {
+
                 if (data.status === 'success') {
                     // Save user info locally to use them in profile.html
+                    localStorage.setItem('userId', data.id); // add the user id.
                     localStorage.setItem('userRole', data.role);
                     localStorage.setItem('userName', data.firstName);
                     localStorage.setItem('userLastName', data.lastName);

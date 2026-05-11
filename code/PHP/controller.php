@@ -150,5 +150,13 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         exit;
     }
 
+    if ($action === 'rateTent') {
+        $userId = $_POST['user_id'];
+        $tentId = $_POST['tent_id'];
+        $score = $_POST['score'];
+        echo json_encode(saveTentRating($userId, $tentId, $score));
+        exit;
+    }
+
 }
 ?>

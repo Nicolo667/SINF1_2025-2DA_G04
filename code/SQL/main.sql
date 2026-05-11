@@ -82,6 +82,14 @@ CREATE TABLE IF NOT EXISTS ratings (
     FOREIGN KEY (event_id) REFERENCES events(id) ON DELETE CASCADE
 );
 
+-- have to change the table to make possible to evaluate the tents
+ALTER TABLE ratings ADD COLUMN tent_id INT DEFAULT NULL;
+ALTER TABLE ratings ADD FOREIGN KEY (tent_id) REFERENCES tents(id) ON DELETE CASCADE;
+ALTER TABLE ratings DROP INDEX unique_user_event;
+ALTER TABLE ratings ADD UNIQUE KEY unique_user_event (user_id, event_id);
+ALTER TABLE ratings ADD UNIQUE KEY unique_user_tent (user_id, tent_id);
+
+
 -- table for the user agenda
 CREATE TABLE IF NOT EXISTS user_agenda (
     user_id INT NOT NULL,

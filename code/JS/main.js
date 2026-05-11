@@ -11,13 +11,11 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     }
 
-    // Gestione tasto Ricerca
     const searchBtn = document.getElementById('searchBtn');
     if (searchBtn) {
         searchBtn.addEventListener('click', performSearch);
     }
 
-    // Gestione tasto "Invio" nella barra di ricerca
     const searchInput = document.getElementById('eventSearch');
     if (searchInput) {
         searchInput.addEventListener('keypress', (e) => {
@@ -28,7 +26,7 @@ document.addEventListener('DOMContentLoaded', () => {
     const sortSelect = document.getElementById('eventSort');
     if (sortSelect) {
         sortSelect.addEventListener('change', (e) => {
-            loadMainPageData(e.target.value); // Ricarica quando cambia la select
+            loadMainPageData(e.target.value); 
         });
     }
 
@@ -131,11 +129,20 @@ function renderEventCard(event) { // create the card for the events.
 }
 
 function renderTentCard(tent) { // create the card for the tents.
+    const avgRating = tent.avg_rating ? tent.avg_rating : "0.0";
+    
+    // create the 5 stars 
+    let starsHtml = '';
+    for (let i = 5; i >= 1; i--) {
+        starsHtml += `<span class="star" onclick="submitTentRating(${tent.id}, ${i})" style="cursor:pointer; font-size: 1.2rem; color: #ccc;">★</span>`;
+    }
+
     return ` 
         <article class="card">
             <div class="category">Faculty Tent</div>
             <h3>${tent.name}</h3>
-            
+            <span class="rating-badge">⭐ ${avgRating}</span>
+
             <div style="margin: 1rem 0; font-size: 0.9rem; color: #555;">
                 <p><strong>📍 Location:</strong> ${tent.location}</p>
                 <p><strong>🕒 Hours:</strong> ${tent.opening_time.substring(0,5)} - ${tent.closing_time.substring(0,5)}</p>
@@ -143,6 +150,11 @@ function renderTentCard(tent) { // create the card for the tents.
 
             <div style="border-top: 1px solid #eee; padding-top: 1rem; margin-top: 1rem;">
                 <p style="font-style: italic; color: #666;">${tent.description || 'No description available.'}</p>
+            </div>
+
+            <div class="rating-section" style="border-top: 1px solid #eee; padding-top: 1rem; margin-top: 1rem; text-align: center;">
+                <p style="font-size: 0.8rem; margin-bottom: 5px; color: #777;">Rate this tent:</p>
+                <div class="stars-container">${starsHtml}</div>
             </div>
         </article>
     `;
@@ -197,4 +209,27 @@ function performSearch() {
     if (!found) {
         alert("No results found for '" + searchTerm + "'");
     }
+}
+
+function submitTentRating(tentId, score) {
+    const userId = localStorage.getItem('userId'); 
+    
+
+    const formData = new FormData();
+    formData.append('action', 'rateTent');
+    formData.append('user_id', userId);
+    formData.append('tent_id', tentId);
+    formData.append('score', score);
+
+    fetch('../PHP/controller.php', { method: 'POST', body: formData })
+    .then(r => r.json())
+    .then(data => {
+        if (data.status === 'success') {
+            alert(data.message);
+            loadMainPageData(); // Rrecall to show the new avg.
+        } else {
+            alert("Error: " + data.message);
+        }
+    })
+    .catch(err => console.error("Error rating tent:", err));
 }

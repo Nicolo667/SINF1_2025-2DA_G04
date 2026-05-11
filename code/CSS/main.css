@@ -202,3 +202,25 @@ footer { text-align: center; padding: 3rem; background: #ddd; font-size: 0.8rem;
     box-sizing: border-box;
     transition: all 0.3s ease;
 }
+
+/* main.css */
+
+.stars-container {
+    display: inline-flex;
+    flex-direction: row-reverse; /* Inverte l'ordine per la logica dell'hover */
+    justify-content: center;
+}
+
+.star {
+    font-size: 1.5rem;
+    color: #ccc; /* Grigio di default */
+    cursor: pointer;
+    transition: color 0.2s ease;
+    padding: 0 2px;
+}
+
+/* Quando passi sopra una stella, colora lei e tutte quelle a SINISTRA */
+.star:hover,
+.star:hover ~ .star {
+    color: #f5c518 !important; /* Giallo oro */
+}
