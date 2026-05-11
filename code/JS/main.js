@@ -25,24 +25,38 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     }
 
+    const sortSelect = document.getElementById('eventSort');
+    if (sortSelect) {
+        sortSelect.addEventListener('change', (e) => {
+            loadMainPageData(e.target.value); // Ricarica quando cambia la select
+        });
+    }
+
     loadMainPageData(); // create the structure of main page.
 });
 
 let allEvents = []; // list of events.
 
-function loadMainPageData() {
+function loadMainPageData(sortOrder = 'date_asc') {
     const eventsContainer = document.getElementById('events-grid');
     const tentsContainer = document.getElementById('tents-grid');
+
+    if (eventsContainer) eventsContainer.innerHTML = ''; // clean the container before doing all the operations.
 
     // upload the events in the main page.
     const eventFormData = new FormData();
     eventFormData.append('action', 'getAllEvents'); // call the new controller function. 
+    eventFormData.append('sort', sortOrder);
 
     fetch('../PHP/controller.php', { method: 'POST', body: eventFormData }) //call the php controller to get the events.
     .then(r => r.json())
     .then(data => {
         if (data.status === 'success') {
             allEvents = data.events;
+
+            const activeFilterBtn = document.querySelector('.filter-btn.active'); // mantain the filter 
+            const currentFilter = activeFilterBtn ? activeFilterBtn.innerText.trim() : 'all';
+
             renderFilteredEvents('all');  // show all the events in the beginning.
             setupFilters();
         }
@@ -74,7 +88,7 @@ function setupFilters() { // set up the filter botton.
         btn.addEventListener('click', function() {
             buttons.forEach(b => b.classList.remove('active')); // remove the active class from all buttons.
             this.classList.add('active');
-            renderFilteredEvents(this.innerText.trim());
+            renderFilteredEvents(this.getAttribute('data-filter'));
         });
     });
 }

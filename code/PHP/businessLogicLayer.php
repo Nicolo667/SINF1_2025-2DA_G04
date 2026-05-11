@@ -272,6 +272,8 @@ function getAllEvents($data = null) {
     global $pdo;
     try {
         $eventId = isset($data['id']) ? (int)$data['id'] : null;
+        // default sorting (sort by data)
+        $sort = isset($data['sort']) ? $data['sort'] : 'date_asc';
 
         if ($eventId) {
             // get all the events and also their averange 
@@ -298,12 +300,16 @@ function getAllEvents($data = null) {
             return ["status" => "success", "event" => $event, "artists" => $artists];
 
         } else {
-            // get all the events and also the averange for the cards of the main page
+            $orderBy = "event_date ASC, event_time ASC"; // Default senza alias 'e.'
+            if ($sort === 'rating_desc') {
+                $orderBy = "avg_rating DESC, event_date ASC";
+            }
+
             $sql = "SELECT id, title, description, DATE_FORMAT(event_date, '%Y-%m-%d') AS event_date, 
-                           event_time, location, type,
-                           (SELECT ROUND(AVG(score), 1) FROM ratings WHERE event_id = events.id) AS avg_rating 
+                        event_time, location, type,
+                        (SELECT ROUND(AVG(score), 1) FROM ratings WHERE event_id = events.id) AS avg_rating 
                     FROM events 
-                    ORDER BY event_date ASC";
+                    ORDER BY $orderBy";
             
             $stmt = $pdo->query($sql);
             $events = $stmt->fetchAll(PDO::FETCH_ASSOC);

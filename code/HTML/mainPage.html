@@ -47,6 +47,13 @@
                 <button class="filter-btn" data-filter="Tradition">Tradition</button>
                 <button class="filter-btn" data-filter="Music">Music</button>
             </div>
+            <div class="sorting-options" style="text-align: right; margin-bottom: 15px;">
+                <label for="eventSort">Order by: </label>
+                <select id="eventSort" style="padding: 5px; border-radius: 5px; border: 1px solid #ccc;">
+                    <option value="date_asc">Date</option>
+                    <option value="rating_desc">Top Rated</option>
+                </select>
+            </div>
             <div class="grid" id="events-grid"> </div> <!-- this is useful for the css and js pages is an empty container, js full this container -->
         </section>
 
