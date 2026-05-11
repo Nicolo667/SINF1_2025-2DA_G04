@@ -140,5 +140,15 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         exit;
     }
 
+    if ($action === 'rateEvent') {
+        session_start();
+        $userId = $_SESSION['user_id'];
+        $eventId = $_POST['event_id'];
+        $score = $_POST['score'];
+        
+        echo json_encode(saveEventRating($userId, $eventId, $score));
+        exit;
+    }
+
 }
 ?>

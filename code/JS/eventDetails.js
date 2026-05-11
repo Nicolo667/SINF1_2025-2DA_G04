@@ -6,6 +6,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
     if (eventId) {
         fetchEventDetails(eventId);
+        setupStarRating(eventId);
     } else {
         console.error("No id found in URL");
         document.getElementById('event-detail-content').innerHTML = "<p>Error: Event ID missing.</p>";
@@ -121,4 +122,45 @@ function renderArtists(artists) {
         `;
         grid.appendChild(artistCard);
     });
+}
+
+function setupStarRating(eventId) {
+    const stars = document.querySelectorAll('#starRating span');
+    
+    stars.forEach(star => {
+        star.addEventListener('click', function() {
+            const score = this.getAttribute('data-value');
+            
+            const formData = new FormData();
+            formData.append('action', 'rateEvent');
+            formData.append('event_id', eventId); 
+            formData.append('score', score);
+
+            fetch('../PHP/controller.php', { method: 'POST', body: formData })
+            .then(r => r.json())
+            .then(data => {
+                if (data.status === 'success') {
+                    alert(data.message);
+                    location.reload(); // new averange
+                    window.location.href = 'profile.html';
+                } else {
+                    alert(data.message); // error if a user isn't registered for that event.
+                }
+            });
+        });
+
+        star.addEventListener('mouseover', () => highlightStars(star.getAttribute('data-value')));
+        star.addEventListener('mouseleave', resetStars);
+    });
+
+    function highlightStars(val) {
+        stars.forEach(s => {
+            s.innerText = s.getAttribute('data-value') <= val ? '★' : '☆'; // how the stars change
+            s.style.color = s.getAttribute('data-value') <= val ? '#ffb81c' : '#ccc';
+        });
+    }
+
+    function resetStars() {
+        stars.forEach(s => { s.innerText = '☆'; s.style.color = '#ccc'; });
+    }
 }

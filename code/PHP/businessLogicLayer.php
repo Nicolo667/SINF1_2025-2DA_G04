@@ -381,17 +381,27 @@ function getUserAgenda() {
     $userId = $_SESSION['user_id'];
 
     try {
-        // Selezioniamo gli eventi ordinandoli per data e ora
-        $sql = "SELECT e.*, DATE_FORMAT(e.event_date, '%Y-%m-%d') as event_date 
+        // Select the events, order them by date an hour. and now also show the avg of ratings.
+        $sql = "SELECT e.*, 
+                       DATE_FORMAT(e.event_date, '%Y-%m-%d') as event_date,
+                       (SELECT ROUND(AVG(score), 1) FROM ratings WHERE event_id = e.id) as avg_rating
                 FROM events e 
                 JOIN user_agenda ua ON e.id = ua.event_id 
                 WHERE ua.user_id = ? 
                 ORDER BY e.event_date ASC, e.event_time ASC";
+                
         $stmt = $pdo->prepare($sql);
         $stmt->execute([$userId]);
-        return ["status" => "success", "events" => $stmt->fetchAll(PDO::FETCH_ASSOC)];
+        
+        return [
+            "status" => "success", 
+            "events" => $stmt->fetchAll(PDO::FETCH_ASSOC)
+        ];
     } catch (PDOException $e) {
-        return ["status" => "error", "message" => "Error durnig uploading agenda: " . $e->getMessage()];
+        return [
+            "status" => "error", 
+            "message" => "Error during uploading user_agenda: " . $e->getMessage()
+        ];
     }
 }
 
@@ -554,15 +564,34 @@ function exportUserAgendaToCSV($userId) {
 function saveEventRating($userId, $eventId, $score) {
     global $pdo;
     try {
-        // if the user already voted, tho vote change. (use the duplicate)
+        // chack if the user is registered fot this event and that the event isn't in the future
+        $sqlCheck = "SELECT COUNT(*) FROM user_agenda ua
+                     JOIN events e ON ua.event_id = e.id
+                     WHERE ua.user_id = ? AND ua.event_id = ? 
+                     AND (e.event_date < CURRENT_DATE OR (e.event_date = CURRENT_DATE AND e.event_time <= CURRENT_TIME))";
+        
+        $stmtCheck = $pdo->prepare($sqlCheck);
+        $stmtCheck->execute([$userId, $eventId]);
+        $canRate = $stmtCheck->fetchColumn();
+
+        if (!$canRate) {
+            return [
+                "status" => "error", 
+                "message" => "You can only rate events that have already occurred and that you attended."
+            ];
+        }
+
+        // if the user pass all the checks we update his score.
         $sql = "INSERT INTO ratings (user_id, event_id, score) VALUES (?, ?, ?)
                 ON DUPLICATE KEY UPDATE score = VALUES(score)";
+        
         $stmt = $pdo->prepare($sql);
-        return $stmt->execute([$userId, $eventId, $score]) 
-            ? ["status" => "success", "message" => "Rating saved!"] 
-            : ["status" => "error", "message" => "Failed to save rating"];
+        $stmt->execute([$userId, $eventId, $score]);
+        
+        return ["status" => "success", "message" => "Successfull rating, thank you :)"];
+
     } catch (PDOException $e) {
-        return ["status" => "error", "message" => $e->getMessage()];
+        return ["status" => "error", "message" => "Database Error: " . $e->getMessage()];
     }
 }
 

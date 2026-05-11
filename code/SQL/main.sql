@@ -100,6 +100,9 @@ CREATE TABLE IF NOT EXISTS roles (
 -- add the default roles
 INSERT IGNORE INTO roles (role_name) VALUES ('user'), ('admin');
 
+-- user can vote only one time for an event.
+ALTER TABLE ratings ADD UNIQUE KEY unique_user_event (user_id, event_id);
+
 -- add some info and events without the php logic
 
 INSERT INTO users (name, username, first_name, last_name, birth_date, email, password_hash, role)
