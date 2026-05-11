@@ -151,11 +151,15 @@ function loadEvents() {
 
             data.events.forEach(event => {
                 const card = document.createElement('div');
+                const stars = event.avg_rating ? `⭐ ${event.avg_rating}` : "No ratings yet"; //add the stars also in the profile page
                 card.className = 'card event-card-profile'; 
                 card.innerHTML = `
                         <div class="card-content" onclick="window.location.href='eventDetails.html?id=${event.id}'" >
                             <span class="category">${event.type}</span>
                             <h3>${event.title}</h3>
+                            <div class="rating-badge" style="font-size: 0.85rem; font-weight: bold; color: #444; background: #f0f0f0; padding: 2px 8px; border-radius: 12px;">
+                                    ${stars}
+                            </div>
                             <p><i class="fa fa-calendar"></i> ${event.event_date}</p>
                             <p><i class="fa fa-map-marker"></i> ${event.location}</p>
                             <button class="btn-delete" onclick="removeRegistration(${event.id})">

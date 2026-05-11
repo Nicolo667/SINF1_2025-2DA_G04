@@ -97,10 +97,15 @@ function renderFilteredEvents(filter) { // show the events according to the filt
 
 function renderEventCard(event) { // create the card for the events.
     // change the first line, when we click on the card we go to the event own page.
+    const stars = event.avg_rating ? `⭐ ${event.avg_rating}` : "No ratings yet"; //add the stars on the main page.
+
     return `
         <article class="card" onclick="window.location.href='eventDetails.html?id=${event.id}'" style="cursor: pointer;"> 
             <div class="category">${event.type}</div>
             <h3>${event.title}</h3>
+            <div class="rating-badge" style="font-size: 0.85rem; font-weight: bold; color: #444; background: #f0f0f0; padding: 2px 8px; border-radius: 12px;">
+                    ${stars}
+            </div>
             <div style="margin: 1rem 0; font-size: 0.9rem; color: #666;">
                 <p><strong>📅 Date:</strong> ${event.event_date}</p>
                 <p><strong>⏰ Time:</strong> ${event.event_time.substring(0,5)}</p>

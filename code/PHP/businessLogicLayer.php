@@ -271,19 +271,22 @@ function deleteEvent($data) {
 function getAllEvents($data = null) {
     global $pdo;
     try {
-        $eventId = isset($data['id']) ? (int)$data['id'] : null; // if we have the id we check for the correct event.
+        $eventId = isset($data['id']) ? (int)$data['id'] : null;
 
         if ($eventId) {
-            // take the details of the event.
-            $sql = "SELECT id, title, description, DATE_FORMAT(event_date, '%Y-%m-%d') AS event_date, event_time, location, type 
+            // get all the events and also their averange 
+            $sql = "SELECT id, title, description, DATE_FORMAT(event_date, '%Y-%m-%d') AS event_date, 
+                           event_time, location, type,
+                           (SELECT ROUND(AVG(score), 1) FROM ratings WHERE event_id = events.id) AS avg_rating
                     FROM events WHERE id = ?";
+            
             $stmt = $pdo->prepare($sql);
             $stmt->execute([$eventId]);
             $event = $stmt->fetch(PDO::FETCH_ASSOC);
 
             if (!$event) return ["status" => "error", "message" => "Event not found"];
 
-            // take the artist of the event
+            // get all the artists
             $sqlArt = "SELECT a.id, a.name, a.genre, a.bio 
                        FROM artists a 
                        JOIN event_artists ea ON a.id = ea.artist_id 
@@ -293,11 +296,18 @@ function getAllEvents($data = null) {
             $artists = $stmtArt->fetchAll(PDO::FETCH_ASSOC);
 
             return ["status" => "success", "event" => $event, "artists" => $artists];
+
         } else {
-            // if there isn't an id we take all the events to show them in the main page 
-            $sql = "SELECT id, title, description, DATE_FORMAT(event_date, '%Y-%m-%d') AS event_date, event_time, location, type FROM events ORDER BY event_date ASC";
+            // get all the events and also the averange for the cards of the main page
+            $sql = "SELECT id, title, description, DATE_FORMAT(event_date, '%Y-%m-%d') AS event_date, 
+                           event_time, location, type,
+                           (SELECT ROUND(AVG(score), 1) FROM ratings WHERE event_id = events.id) AS avg_rating 
+                    FROM events 
+                    ORDER BY event_date ASC";
+            
             $stmt = $pdo->query($sql);
             $events = $stmt->fetchAll(PDO::FETCH_ASSOC);
+            
             return ["status" => "success", "events" => $events];
         }
     } catch (PDOException $e) {
@@ -539,4 +549,31 @@ function exportUserAgendaToCSV($userId) {
         die("Error exporting agenda: " . $e->getMessage());
     }
 }
+
+// function to save rating
+function saveEventRating($userId, $eventId, $score) {
+    global $pdo;
+    try {
+        // if the user already voted, tho vote change. (use the duplicate)
+        $sql = "INSERT INTO ratings (user_id, event_id, score) VALUES (?, ?, ?)
+                ON DUPLICATE KEY UPDATE score = VALUES(score)";
+        $stmt = $pdo->prepare($sql);
+        return $stmt->execute([$userId, $eventId, $score]) 
+            ? ["status" => "success", "message" => "Rating saved!"] 
+            : ["status" => "error", "message" => "Failed to save rating"];
+    } catch (PDOException $e) {
+        return ["status" => "error", "message" => $e->getMessage()];
+    }
+}
+
+// funtion to get the averange of an event.
+function getAverageRating($eventId) {
+    global $pdo;
+    $sql = "SELECT ROUND(AVG(score), 1) as average FROM ratings WHERE event_id = ?";
+    $stmt = $pdo->prepare($sql);
+    $stmt->execute([$eventId]);
+    $result = $stmt->fetch(PDO::FETCH_ASSOC);
+    return $result['average'] ?? 0;
+}
+
 ?>
