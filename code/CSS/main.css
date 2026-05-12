@@ -41,15 +41,51 @@ nav a {
 }
 
 /* recall class hero */
-.hero { 
-    background: linear-gradient(rgba(10,25,49,0.8), rgba(10,25,49,0.8)), /*the color of 'background'*/
-                url('https://images.unsplash.com/photo-1533174072545-7a4b6ad7a6c3?auto=format&fit=crop&w=1350&q=80');
-                /* the link of the picture */
-    background-size: cover; /*image cover all the background*/
-    background-position: center;
-    color: var(--white); 
-    padding: 6rem 5%; 
-    text-align: center; 
+.hero {
+    position: relative;
+    height: 80vh; /* Altezza della sezione hero */
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    color: white;
+    overflow: hidden; /* Impedisce al video di uscire dai bordi */
+}
+
+#hero-video {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    min-width: 100%;
+    min-height: 100%;
+    width: auto;
+    height: auto;
+    z-index: -2; /* Mette il video dietro a tutto */
+    transform: translate(-50%, -50%);
+    object-fit: cover; /* Fondamentale: fa sì che il video riempia lo spazio come una cover */
+}
+
+.hero-overlay {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.6); /* Oscuramento: 0.6 è nero al 60%. Alza a 0.7 o 0.8 se vuoi più buio */
+    z-index: -1; /* Sopra il video, sotto il testo */
+}
+
+.hero-content {
+    z-index: 1; /* Testo in primo piano */
+    max-width: 800px;
+    padding: 0 20px;
+}
+
+/* Rendi il testo dell'hero un po' più evidente (opzionale) */
+.hero h1 {
+    font-size: 3.5rem;
+    margin-bottom: 1rem;
+    text-shadow: 2px 2px 4px rgba(0,0,0,0.5); /* Ombra leggera per staccare dal video */
 }
 
 .btn { 
