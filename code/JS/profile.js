@@ -153,12 +153,21 @@ function loadEvents() {
                 const card = document.createElement('div');
                 const stars = event.avg_rating ? `⭐ ${event.avg_rating}` : "No ratings yet"; //add the stars also in the profile page
                 card.className = 'card event-card-profile'; 
+
+                const countdownId = `timer-${event.id}`; // add the timer for the dinamic countdown
+                setTimeout(() => {
+                    updateCountdown(countdownId, event.event_date, event.event_time);
+                }, 100);
+
                 card.innerHTML = `
                         <div class="card-content" onclick="window.location.href='eventDetails.html?id=${event.id}'" >
                             <span class="category">${event.type}</span>
                             <h3>${event.title}</h3>
                             <div class="rating-badge" style="font-size: 0.85rem; font-weight: bold; color: #444; background: #f0f0f0; padding: 2px 8px; border-radius: 12px;">
                                     ${stars}
+                            </div>
+                            <div id="${countdownId}" class="event-countdown" style="font-weight: bold; color: #e74c3c; margin: 10px 0;">
+                                Loading countdown...
                             </div>
                             <p><i class="fa fa-calendar"></i> ${event.event_date}</p>
                             <p><i class="fa fa-map-marker"></i> ${event.location}</p>
@@ -221,7 +230,7 @@ function checkUpcomingNotifications() {
             if (data.events && data.events.length > 0) {
                 let message = "UPCOMING EVENTS (Next 48h):\n\n";
                 data.events.forEach(ev => {
-                    message += `- ${ev.title} at ${ev.event_date}\n`;
+                    message += `- ${ev.title}`;
                 });
                 alert(message);
             }
@@ -233,4 +242,38 @@ function checkUpcomingNotifications() {
         console.error("Fetch error:", err);
         alert("Connection Error: " + err.message);
     });
+}
+
+function updateCountdown(elementId, dateStr, timeStr) {
+    const timerElement = document.getElementById(elementId);
+    if (!timerElement) return;
+
+    // date and hours combination
+    const eventDate = new Date(`${dateStr}T${timeStr}`).getTime();
+
+    const interval = setInterval(() => {
+        const now = new Date().getTime();
+        const distance = eventDate - now;
+
+        // if the event is about the past
+        if (distance < 0) {
+            timerElement.innerHTML = "Event already done";
+            timerElement.style.color = "#888";
+            clearInterval(interval);
+            return;
+        }
+
+        // calculate days hours and minutes
+        const days = Math.floor(distance / (1000 * 60 * 60 * 24));
+        const hours = Math.floor((distance % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+        const minutes = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60));
+
+        if (days > 0) {
+            timerElement.innerHTML = `Starts in: ${days} days`;
+        } else if (hours > 0) {
+            timerElement.innerHTML = `Starts in: ${hours} hours`;
+        } else {
+            timerElement.innerHTML = `Starts in: ${minutes} minutes`;
+        }
+    }, 1000); 
 }

@@ -113,6 +113,11 @@ function renderEventCard(event) { // create the card for the events.
     // change the first line, when we click on the card we go to the event own page.
     const stars = event.avg_rating ? `⭐ ${event.avg_rating}` : "No ratings yet"; //add the stars on the main page.
 
+    const countdownId = `timer-${event.id}`; // add the timer for the dinamic countdown
+    setTimeout(() => {
+        updateCountdown(countdownId, event.event_date, event.event_time);
+    }, 100);
+
     return `
         <article class="card" onclick="window.location.href='eventDetails.html?id=${event.id}'" style="cursor: pointer;"> 
             <div class="category">${event.type}</div>
@@ -120,6 +125,11 @@ function renderEventCard(event) { // create the card for the events.
             <div class="rating-badge" style="font-size: 0.85rem; font-weight: bold; color: #444; background: #f0f0f0; padding: 2px 8px; border-radius: 12px;">
                     ${stars}
             </div>
+
+            <div id="${countdownId}" class="event-countdown" style="font-weight: bold; color: #e74c3c; margin: 10px 0;">
+                Loading countdown...
+            </div>
+
             <div style="margin: 1rem 0; font-size: 0.9rem; color: #666;">
                 <p><strong>📅 Date:</strong> ${event.event_date}</p>
                 <p><strong>⏰ Time:</strong> ${event.event_time.substring(0,5)}</p>
@@ -234,4 +244,38 @@ function submitTentRating(tentId, score) {
         }
     })
     .catch(err => console.error("Error rating tent:", err));
+}
+
+function updateCountdown(elementId, dateStr, timeStr) {
+    const timerElement = document.getElementById(elementId);
+    if (!timerElement) return;
+
+    // date and hours combination
+    const eventDate = new Date(`${dateStr}T${timeStr}`).getTime();
+
+    const interval = setInterval(() => {
+        const now = new Date().getTime();
+        const distance = eventDate - now;
+
+        // if the event is about the past
+        if (distance < 0) {
+            timerElement.innerHTML = "Event already done";
+            timerElement.style.color = "#888";
+            clearInterval(interval);
+            return;
+        }
+
+        // calculate days hours and minutes
+        const days = Math.floor(distance / (1000 * 60 * 60 * 24));
+        const hours = Math.floor((distance % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+        const minutes = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60));
+
+        if (days > 0) {
+            timerElement.innerHTML = `Starts in: ${days} days`;
+        } else if (hours > 0) {
+            timerElement.innerHTML = `Starts in: ${hours} hours`;
+        } else {
+            timerElement.innerHTML = `Starts in: ${minutes} minutes`;
+        }
+    }, 1000); 
 }
