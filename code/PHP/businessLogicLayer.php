@@ -645,5 +645,21 @@ function saveTentRating($userId, $tentId, $score) {
     }
 }
 
+function getEventRatings($eventId) {
+    global $pdo;
+    try {
+        $sql = "SELECT r.score, r.comment, r.created_at, u.username 
+                FROM ratings r 
+                JOIN users u ON r.user_id = u.id 
+                WHERE r.event_id = ? 
+                ORDER BY r.created_at DESC";
+        
+        $stmt = $pdo->prepare($sql);
+        $stmt->execute([$eventId]);
+        return $stmt->fetchAll(PDO::FETCH_ASSOC);
+    } catch (PDOException $e) {
+        return [];
+    }
+}
 
 ?>

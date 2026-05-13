@@ -7,6 +7,7 @@ document.addEventListener('DOMContentLoaded', () => {
     if (eventId) {
         fetchEventDetails(eventId);
         setupStarRating(eventId);
+        fetchRatings(eventId);
     } else {
         console.error("No id found in URL");
         document.getElementById('event-detail-content').innerHTML = "<p>Error: Event ID missing.</p>";
@@ -165,4 +166,36 @@ function setupStarRating(eventId) {
     function resetStars() {
         stars.forEach(s => { s.innerText = '☆'; s.style.color = '#ccc'; });
     }
+
+}
+
+function fetchRatings(eventId) {
+    const formData = new FormData();
+    formData.append('action', 'getEventRatings');
+    formData.append('id', eventId);
+
+    fetch('../PHP/controller.php', { method: 'POST', body: formData })
+    .then(r => r.json())
+    .then(ratings => {
+        renderRatings(ratings);
+    });
+}
+
+function renderRatings(ratings) {
+    const container = document.getElementById('reviews-container');
+    if (ratings.length === 0) {
+        container.innerHTML = '<p>No reviews yet. Be the first to rate this event!</p>';
+        return;
+    }
+
+    container.innerHTML = ratings.map(r => `
+        <div class="card" style="margin-bottom: 1rem; border-left: 5px solid var(--primary);">
+            <div style="display: flex; justify-content: space-between; align-items: center;">
+                <strong>${r.username}</strong>
+                <span style="color: #ffb81c;">${'★'.repeat(r.score)}${'☆'.repeat(5 - r.score)}</span>
+            </div>
+            <p style="margin: 0.5rem 0; color: #555;">${r.comment || '<em>No comment left.</em>'}</p>
+            <small style="color: #999;">${new Date(r.created_at).toLocaleDateString()}</small>
+        </div>
+    `).join('');
 }

@@ -159,6 +159,12 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         exit;
     }
 
+    if ($action === 'getEventRatings') {
+        $eventId = $_POST['id']; 
+        echo json_encode(getEventRatings($eventId));
+    exit;
+}
+
 
 
 }
