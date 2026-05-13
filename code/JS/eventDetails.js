@@ -130,11 +130,13 @@ function setupStarRating(eventId) {
     stars.forEach(star => {
         star.addEventListener('click', function() {
             const score = this.getAttribute('data-value');
+            const commentText = document.getElementById('eventComment').value; // we take also the comment
             
             const formData = new FormData();
             formData.append('action', 'rateEvent');
             formData.append('event_id', eventId); 
             formData.append('score', score);
+            formData.append('comment', commentText); // add the comment to the request
 
             fetch('../PHP/controller.php', { method: 'POST', body: formData })
             .then(r => r.json())

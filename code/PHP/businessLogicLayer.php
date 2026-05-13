@@ -581,7 +581,7 @@ function exportUserAgendaToCSV($userId) {
 }
 
 // function to save rating
-function saveEventRating($userId, $eventId, $score) {
+function saveEventRating($userId, $eventId, $score, $comment) {
     global $pdo;
     try {
         // chack if the user is registered fot this event and that the event isn't in the future
@@ -602,11 +602,11 @@ function saveEventRating($userId, $eventId, $score) {
         }
 
         // if the user pass all the checks we update his score.
-        $sql = "INSERT INTO ratings (user_id, event_id, score) VALUES (?, ?, ?)
-                ON DUPLICATE KEY UPDATE score = VALUES(score)";
+        $sql = "INSERT INTO ratings (user_id, event_id, score, comment) VALUES (?, ?, ?, ?)
+                ON DUPLICATE KEY UPDATE score = VALUES(score), comment = VALUES(comment)";
         
         $stmt = $pdo->prepare($sql);
-        $stmt->execute([$userId, $eventId, $score]);
+        $stmt->execute([$userId, $eventId, $score, $comment]);
         
         return ["status" => "success", "message" => "Successfull rating, thank you :)"];
 
@@ -644,5 +644,6 @@ function saveTentRating($userId, $tentId, $score) {
         return ["status" => "error", "message" => "Error in DB: " . $e->getMessage()];
     }
 }
+
 
 ?>

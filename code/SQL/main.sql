@@ -82,6 +82,8 @@ CREATE TABLE IF NOT EXISTS ratings (
     FOREIGN KEY (event_id) REFERENCES events(id) ON DELETE CASCADE
 );
 
+ALTER TABLE ratings ADD COLUMN comment TEXT AFTER score;
+
 -- have to change the table to make possible to evaluate the tents
 ALTER TABLE ratings ADD COLUMN tent_id INT DEFAULT NULL;
 ALTER TABLE ratings ADD FOREIGN KEY (tent_id) REFERENCES tents(id) ON DELETE CASCADE;

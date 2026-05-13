@@ -79,14 +79,14 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
     // get the artist. 
     if ($action === 'getArtists') {
-    $result = getAllArtists();
-    echo json_encode($result);
-    exit;
+        $result = getAllArtists();
+        echo json_encode($result);
+        exit;
     }
 
     if ($action === 'addToAgenda') {
-    echo json_encode(addToAgenda($_POST));
-    exit;
+        echo json_encode(addToAgenda($_POST));
+        exit;
     }
 
     if ($action === 'removeFromAgenda') {
@@ -145,8 +145,9 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         $userId = $_SESSION['user_id'];
         $eventId = $_POST['event_id'];
         $score = $_POST['score'];
+        $comment = isset($_POST['comment']) ? $_POST['comment'] : '';
         
-        echo json_encode(saveEventRating($userId, $eventId, $score));
+        echo json_encode(saveEventRating($userId, $eventId, $score, $comment));
         exit;
     }
 
