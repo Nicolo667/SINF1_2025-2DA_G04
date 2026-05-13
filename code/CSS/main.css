@@ -271,3 +271,21 @@ footer { text-align: center; padding: 3rem; background: #ddd; font-size: 0.8rem;
     text-transform: uppercase;
     letter-spacing: 1px;
 }
+
+.stars {
+    display: flex;
+    justify-content: center; 
+    gap: 10px;               
+    margin: 15px 0;
+}
+
+.stars span {
+    font-size: 3rem;        
+    cursor: pointer;         
+    color: #ffd700;         
+    transition: transform 0.2s ease;
+}
+
+.stars span:hover {
+    transform: scale(1.2);  
+}
