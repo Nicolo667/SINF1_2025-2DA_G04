@@ -28,17 +28,19 @@ function renderArtists(artists) { // create the card for the artists and put it 
     artists.forEach(artist => {
         const artistCard = document.createElement('div'); // create a card for every artist.
         artistCard.className = 'artist-card';
+
+        // take the image
+        const imgSource = artist.image_path ? `../../${artist.image_path}` : '../../default_artist.jpg';
         
         // content of the card.
         artistCard.innerHTML = ` 
-            <div class="card-header"> 
-                <h2 class="artist-name">${artist.name}</h2>
-                <span class="genre-badge">${artist.genre}</span>
+            <div class="artist-image-container">
+                <img src="${imgSource}" alt="${artist.name}" class="artist-img">
             </div>
-            <hr>
-            <div class="card-body">
-                <p><strong>Biography:</strong></p>
-                <p class="bio-text">${artist.bio}</p>
+            <div class="artist-content">
+                <span class="genre-badge">${artist.genre}</span>
+                <h2 class="artist-name">${artist.name}</h2>
+                <p class="bio-text">${artist.bio || 'Biography not available.'}</p>
             </div>
         `;
         container.appendChild(artistCard); // add the card to the container.

@@ -62,6 +62,8 @@ CREATE TABLE IF NOT EXISTS artists (
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 );
 
+ALTER TABLE artists ADD COLUMN image_path VARCHAR(255) DEFAULT 'default_artist.jpg';
+
 -- relationship table for events and artists (many to many)
 CREATE TABLE IF NOT EXISTS event_artists (
     event_id INT NOT NULL,
