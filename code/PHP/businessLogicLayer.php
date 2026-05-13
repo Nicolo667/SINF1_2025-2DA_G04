@@ -353,7 +353,7 @@ function getAllArtists() {
     global $pdo;
     try {
         // chose all the artist from de db, with all their info and also order it by the name.
-        $sql = "SELECT id, name, genre, bio, image_path FROM artists ORDER BY name ASC";
+        $sql = "SELECT id, name, genre, bio, image_path  FROM artists ORDER BY name ASC";
         $stmt = $pdo->query($sql); // exxecute the query and obtain the results.
         $artists = $stmt->fetchAll(PDO::FETCH_ASSOC);  // create an array with all the artists.
         
