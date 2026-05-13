@@ -290,7 +290,7 @@ function getAllEvents($data = null) {
             if (!$event) return ["status" => "error", "message" => "Event not found"];
 
             // get all the artists
-            $sqlArt = "SELECT a.id, a.name, a.genre, a.bio 
+            $sqlArt = "SELECT a.id, a.name, a.genre, a.bio, a.image_path 
                        FROM artists a 
                        JOIN event_artists ea ON a.id = ea.artist_id 
                        WHERE ea.event_id = ?";

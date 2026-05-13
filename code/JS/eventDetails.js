@@ -113,13 +113,19 @@ function renderArtists(artists) {
 
     artists.forEach(artist => {
         const artistCard = document.createElement('div');
-        artistCard.className = 'card';
+        artistCard.className = 'artist-card';
         artistCard.style.borderTopColor = 'var(--primary)'; 
+        const imgSource = artist.image_path ? `../../${artist.image_path}` : '../../default_artist.jpg';
         
         artistCard.innerHTML = `
-            <span class="category">${artist.genre}</span>
-            <h3 style="margin: 0.5rem 0;">${artist.name}</h3>
-            <p style="font-size: 0.9rem; color: #666; line-height: 1.5;">${artist.bio || 'Biography not available.'}</p>
+            <div class="artist-image-container">
+                <img src="${imgSource}" alt="${artist.name}" class="artist-img">
+            </div>
+            <div class="artist-content">
+                <span class="genre-badge">${artist.genre}</span>
+                <h2 class="artist-name">${artist.name}</h2>
+                <p class="bio-text">${artist.bio || 'International artist performing live at Queima 2026.'}</p>
+            </div>
         `;
         grid.appendChild(artistCard);
     });
