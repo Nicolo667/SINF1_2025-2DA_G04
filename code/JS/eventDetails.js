@@ -124,7 +124,7 @@ function renderArtists(artists) {
             <div class="artist-content">
                 <span class="genre-badge">${artist.genre}</span>
                 <h2 class="artist-name">${artist.name}</h2>
-                <p class="bio-text">${artist.bio || 'International artist performing live at Queima 2026.'}</p>
+                <p class="bio-text">${artist.bio}</p>
             </div>
         `;
         grid.appendChild(artistCard);
