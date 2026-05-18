@@ -7,10 +7,6 @@
     box-shadow: 0 4px 15px rgba(0,0,0,0.1);
 }
 
-.form-group {
-    margin-bottom: 15px;
-}
-
 .form-group label {
     display: block;
     margin-bottom: 5px;
@@ -33,8 +29,10 @@
     cursor: pointer;
     width: 100%;
     font-size: 1.1rem;
+    transition: transform 0.2s;
 }
 
 .btn-confirm:hover {
     background-color: #218838;
+    transform: translateY(-3px);
 }

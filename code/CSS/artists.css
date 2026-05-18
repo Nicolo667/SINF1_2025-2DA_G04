@@ -25,7 +25,12 @@ header {
 }
 
 header h1 { font-size: 1.5rem; }
-nav a { color: var(--white); text-decoration: none; font-weight: 600; }
+
+nav a { 
+    color: var(--white); 
+    text-decoration: none; 
+    font-weight: 600; 
+}
 
 nav a:hover{
     text-decoration: underline;
@@ -33,7 +38,7 @@ nav a:hover{
 
 .card-grid {
     display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+    grid-template-columns: repeat(auto-fit, minmax(320px, 1fr)); /* each card is at least 320px wide and expands to take up 1fr of the remaining space */
     gap: 2rem;
     padding: 3rem 5%;
     max-width: 1200px;
@@ -49,6 +54,7 @@ nav a:hover{
     position: relative;
 }
 
+/* zoom the img */
 .artist-card:hover .artist-img {
     transform: scale(1.08); 
 }
@@ -89,12 +95,12 @@ hr {
     justify-content: center;
     text-align: center;
     padding: 60px 20px;
-    background: linear-gradient(135deg, #1db954 0%, #191414 100%);
+    background: linear-gradient(135deg, #1db954 0%, #191414 100%); /* change the color */
     border-radius: 30px;
     margin: 40px auto;
     max-width: 850px;
     color: white;
-    font-family: 'Arial', sans-serif;
+    font-family: 'Arial', sans-serif; /* we use another font */
 }
 
 .spotify-info h2 {
@@ -118,6 +124,7 @@ hr {
     border: 1px solid rgba(255,255,255,0.1);
 }
 
+/* the card of the playlist */
 .spotify-custom-card:hover {
     background: #383838;
     transform: translateY(-5px);
@@ -164,7 +171,7 @@ hr {
     justify-content: center;
 }
 
-.triangle {
+.triangle { /* the code to 'create' the triangle for the 'play' button */
     width: 0;
     height: 0;
     border-top: 8px solid transparent;
@@ -178,18 +185,19 @@ hr {
     width: 100%;
     height: 250px;    
     position: relative;
-    overflow: hidden; 
-    border-radius: 15px 15px 15px 15px; 
+    overflow: hidden; /* cut all the frame of img that go out the borer */
+    border-radius: 15px 15px 15px 15px; /* all are the same */
 }
 
-.artist-image-container::after {
-    content: "";
+/* code to 'fade' the image */
+.artist-image-container::after { /* with after we create a pseudo element and put it after the img of artist */
+    content: ""; /* pseudo element is empty */
     position: absolute;
     bottom: 0;
     left: 0;
     width: 100%;
-    height: 50%; 
-    background: linear-gradient(to top, var(--white) 0%, transparent 100%);
+    height: 50%; /*not 100%cause we want a fade */
+    background: linear-gradient(to top, var(--white) 0%, transparent 100%); /* from bottom to top, color is white and become transparent */
 }
 
 /* the image css */

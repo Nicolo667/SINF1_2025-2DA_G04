@@ -5,7 +5,7 @@
 }
 
 .profile-container {
-    max-width: 1000px;
+    max-width: 1000px; /* a limit for the width */
     margin: 40px auto;
     padding: 20px;
 }
@@ -59,13 +59,14 @@
     padding: 50px;
     background: #f8f9fa;
     border-radius: 15px;
-    border: 2px dashed #ccc;
-    grid-column: 1 / -1; 
+    border: 2px #ccc;
+    grid-column: 1 / -1; /* occupy the entire available width */
 }
 
 .events-grid {
     display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); 
+    grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+    /* repeat -> use this to all the column, minmax -> size rule for each column, auto-fill -> fills columns automatically */
     gap: 25px; 
     padding: 20px 0; 
     width: 100%;
@@ -80,7 +81,7 @@
     font-weight: 700;
     font-family: 'Inter', sans-serif;
     cursor: pointer;
-    transition: all 0.3s ease;
+    transition: all 0.3s ease; /* to have a beautiful and smooth transition (ease transition) */
     font-size: 0.9rem;
 }
 
@@ -88,10 +89,6 @@
     transform: translateY(-2px);
     box-shadow: 0 4px 12px rgba(255, 184, 28, 0.3);
     background-color: #fca903; 
-}
-
-.btn-logout:active {
-    transform: translateY(0);
 }
     
 .admin-buttons-grid {
@@ -118,9 +115,9 @@
 
 .btn-admin span { font-size: 1.5rem; }
 
-.btn-admin.add { background-color: #28a745; }    /* Verde */
-.btn-admin.edit { background-color: #ffb81c; color: #333; } /* Giallo */
-.btn-admin.delete { background-color: #dc3545; } /* Rosso */
+.btn-admin.add { background-color: #28a745; }    
+.btn-admin.edit { background-color: #ffb81c; color: #333; } 
+.btn-admin.delete { background-color: #dc3545; } 
 
 .btn-admin:hover {
     transform: translateY(-5px);
@@ -129,10 +126,6 @@
 
 .btn-admin.import {
     background-color: #6f42c1; 
-}
-
-.btn-admin.import:hover {
-    background-color: #5a32a3;
 }
 
 .btn-delete {

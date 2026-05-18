@@ -49,36 +49,41 @@ nav a {
     justify-content: center;
     text-align: center;
     color: white;
-    overflow: hidden; 
+    overflow: hidden; /* cut everything that 'go out' of the border */
 }
 
 #hero-video {
-    position: absolute;
-    top: 50%;
+    position: absolute; /* put it in a specific place in the page */
+    /* all of this element is useful to put the video in the correct position */
+    top: 50%; 
     left: 50%;
     min-width: 100%;
     min-height: 100%;
     width: auto;
     height: auto;
     z-index: -2; 
-    transform: translate(-50%, -50%);
+    transform: translate(-50%, -50%); /*correction of the position of the video */
     object-fit: cover; 
 }
 
 .hero-overlay {
+    /* this is used to hide the video under a dark veil */
     position: absolute;
+    /* veil on the top-left of the hero section */
     top: 0;
     left: 0;
+    /* veil cover all the hero section */
     width: 100%;
     height: 100%;
     background: rgba(0, 0, 0, 0.6); 
-    z-index: -1; 
+    z-index: -1; /* used to decide the order of the elements */
 }
 
 .hero-content {
+    /* is the 'box' that contains the text */
     z-index: 1; 
-    max-width: 800px;
-    padding: 0 20px;
+    max-width: 800px; /*not like the video all the section */
+    padding: 0 20px; /* empty space */
 }
 
 .hero h1 {
@@ -88,18 +93,19 @@ nav a {
 }
 
 .btn { 
+    /* style of the button */
     background: var(--accent); 
     color: var(--primary); 
     padding: 0.8rem 2rem; 
     border-radius: 5px; 
     text-decoration: none; 
     font-weight: 700; 
-    display: inline-block;
+    display: inline-block; /* an the same line, respect the padding, margin,.. */
     margin-top: 1rem;
 }
 
 .btn:hover{
-    transform: translateY(-1px);
+    transform: translateY(-1px); /* when we go on the btn it change the position */
 }
 
 .container { max-width: 1100px; margin: 3rem auto; padding: 0 1.5rem; }
@@ -120,15 +126,16 @@ h2 { margin-bottom: 2rem; border-left: 6px solid var(--accent); padding-left: 1r
 
 .filter-btn.active { background: var(--primary); color: var(--white); } /*add the background in filter btn */
 
-.grid { 
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); 
+.grid { /*one of the most important code in css main file */
+    display: grid; /* create the grid whitch contains all the elements of the page e.g. events*/
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); /* column large min 300px, 1fr if remains some space the colum can be bigger */
+    /* atuo-fit means that the program calculate how many columns put in the page */
     /* repeats the pattern for all columns and organizes them according to the parameters */
-    gap: 2rem; 
-    
+    gap: 2rem;     
 }
 
 .card { /*js create new element of class card */
+    /* style for the cards */
     background: var(--white); 
     padding: 2rem; 
     border-radius: 10px; 
@@ -203,12 +210,12 @@ footer { text-align: center; padding: 3rem; background: #ddd; font-size: 0.8rem;
     margin: 2rem auto;
     display: flex;
     gap: 10px;
-    align-items: stretch; 
+    align-items: stretch; /* It forces the elements to have the same height */
 }
 
 /* search bar */
 #eventSearch {
-    flex: 3;
+    flex: 3; /* Makes this element 3 times larger than the button */
     padding: 12px 15px; 
     border-radius: 8px;
     border: 1px solid #778899;
@@ -216,7 +223,7 @@ footer { text-align: center; padding: 3rem; background: #ddd; font-size: 0.8rem;
     background-color: #2c3e50;
     color: #ecf0f1;
     margin: 0;
-    box-sizing: border-box;
+    box-sizing: border-box; /* Includes padding and borders within the total width */
 }
 
 #searchBtn {
@@ -235,29 +242,27 @@ footer { text-align: center; padding: 3rem; background: #ddd; font-size: 0.8rem;
     align-items: center;
     justify-content: center;
     box-sizing: border-box;
-    transition: all 0.3s ease;
+    transition: 0.3s;
 }
-
-/* main.css */
 
 .stars-container {
     display: inline-flex;
-    flex-direction: row-reverse; /* Inverte l'ordine per la logica dell'hover */
+    flex-direction: row-reverse; /* Reverses the order for the hover logic */
     justify-content: center;
 }
 
 .star {
     font-size: 1.5rem;
-    color: #ccc; /* Grigio di default */
+    color: #ccc; 
     cursor: pointer;
     transition: color 0.2s ease;
     padding: 0 2px;
 }
 
-/* Quando passi sopra una stella, colora lei e tutte quelle a SINISTRA */
+/* When you pass over a star, color it and all the ones to the left */
 .star:hover,
 .star:hover ~ .star {
-    color: #f5c518 !important; /* Giallo oro */
+    color: #f5c518 !important; /* yellow, need priority */
 }
 
 /* style of the countdown */
