@@ -1,4 +1,6 @@
 document.addEventListener('DOMContentLoaded', () => {
+
+    // recover all data.
     const role = localStorage.getItem('userRole');
     const name = localStorage.getItem('userName'); // Defined as 'name'
     const lastName = localStorage.getItem('userLastName');
@@ -9,9 +11,9 @@ document.addEventListener('DOMContentLoaded', () => {
     const usernameElement = document.getElementById('displayUsername');
     const emailElement = document.getElementById('displayEmail');
 
-    
+    // create the text of the profile page (the same for both user and admin)
     if (fullNameElement) {
-        fullNameElement.textContent = (name && lastName) ? `${name} ${lastName}` : "User Profile";
+        fullNameElement.textContent = (name && lastName) ? `${name} ${lastName}` : "User Profile"; 
     }
     if (usernameElement) {
         usernameElement.textContent = username || "username";
@@ -19,6 +21,7 @@ document.addEventListener('DOMContentLoaded', () => {
     if (emailElement) {
         emailElement.textContent = email || "email@example.com";
     }
+    // if noone is logged in shows: user profile, username and email@example.com
 
     // role pages.
     const adminView = document.getElementById('adminView'); 
@@ -41,7 +44,7 @@ document.addEventListener('DOMContentLoaded', () => {
             fetch('../PHP/controller.php', { method: 'POST', body: formData })
                 .then(response => response.json())
                 .then(() => {
-                    localStorage.clear();
+                    localStorage.clear(); // clean the local user 
                     window.location.href = 'mainPage.html';
                 })
                 .catch(() => {
@@ -51,7 +54,7 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     }
 
-    // load events for admin.
+    // add events for admin.
     document.addEventListener('click', (e) => {
         const target = e.target.closest('.btn-admin');
 
@@ -66,11 +69,11 @@ document.addEventListener('DOMContentLoaded', () => {
     });
     
     //Load events
-    if (typeof loadEvents === "function") {
+    if (typeof loadEvents === "function") { // if in another line of code somewhere we launched this function 
         loadEvents();
     }
 
-    checkUpcomingNotifications();
+    checkUpcomingNotifications(); // to see the alert for upcoming events
 
     // import csv file.
     const importBtn = document.getElementById('importCsvBtn');
@@ -78,10 +81,10 @@ document.addEventListener('DOMContentLoaded', () => {
 
     // open the selector for file 
     if (importBtn && fileInput) {
-        importBtn.addEventListener('click', () => fileInput.click());
+        importBtn.addEventListener('click', () => fileInput.click()); // simulate a click on the csv hidden button.
 
         // when a user select a file
-        fileInput.addEventListener('change', function() {
+        fileInput.addEventListener('change', function() { // 'change' is when the admin select the file 
             if (this.files && this.files[0]) {
                 const formData = new FormData();
                 formData.append('action', 'importArtistsCsv');
@@ -114,6 +117,7 @@ document.addEventListener('DOMContentLoaded', () => {
             form.method = 'POST';
             form.action = '../PHP/controller.php';
 
+            // this is a 'hidden text' where we put all the information sent to the controller 
             const actionInput = document.createElement('input');
             actionInput.type = 'hidden';
             actionInput.name = 'action';
@@ -122,7 +126,7 @@ document.addEventListener('DOMContentLoaded', () => {
             form.appendChild(actionInput);
             document.body.appendChild(form);
             form.submit();
-            document.body.removeChild(form);
+            document.body.removeChild(form); // page return as before as soon as possible after submitting the form
         });
     }
 
@@ -139,6 +143,7 @@ function loadEvents() {
         method: 'POST',
         body: formData
     })
+
     .then(response => response.json())
     .then(data => {
         if (data.status === 'success') {
@@ -152,12 +157,12 @@ function loadEvents() {
             data.events.forEach(event => {
                 const card = document.createElement('div');
                 const stars = event.avg_rating ? `⭐ ${event.avg_rating}` : "No ratings yet"; //add the stars also in the profile page
-                card.className = 'card event-card-profile'; 
+                card.className = 'card event-card-profile'; // for css
 
                 const countdownId = `timer-${event.id}`; // add the timer for the dinamic countdown
                 setTimeout(() => {
                     updateCountdown(countdownId, event.event_date, event.event_time);
-                }, 100);
+                }, 100); // every 100ms
 
                 card.innerHTML = `
                         <div class="card-content" onclick="window.location.href='eventDetails.html?id=${event.id}'" >
@@ -223,8 +228,6 @@ function checkUpcomingNotifications() {
     })
 
     .then(data => {
-        console.log("Data received:", data);
-
         // create the alert
         if (data.status === 'success') {
             if (data.events && data.events.length > 0) {

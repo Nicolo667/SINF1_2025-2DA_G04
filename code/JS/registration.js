@@ -3,12 +3,13 @@ document.addEventListener('DOMContentLoaded', function() {
     const roleSelect = document.getElementById('role');
     const adminCodeGroup = document.getElementById('adminCodeGroup');
 
-    roleSelect.addEventListener('change', function() {
-        adminCodeGroup.style.display = (this.value === 'admin') ? 'block' : 'none';
+    roleSelect.addEventListener('change', function() { // change attribute means that this happened when we chandge the value of the role box
+        adminCodeGroup.style.display = (this.value === 'admin') ? 'block' : 'none'; 
+        // if i select 'admin' role -> make the secret code text box visible
     });
 
-    registrationForm.addEventListener('submit', function(e) {
-        e.preventDefault();
+    registrationForm.addEventListener('submit', function(e) { // when we submit the form 
+        e.preventDefault(); // block the normal behavior, js has the control
 
         const emailValue = document.getElementById('email').value;
         // check the email format.
@@ -19,7 +20,8 @@ document.addEventListener('DOMContentLoaded', function() {
             return; 
         }
 
-        // create a formatData object.
+        // if the email is correct
+        // create a formatData object with all the informations.
         const formData = new FormData();
         formData.append('action', 'register');
         formData.append('username', document.getElementById('username').value);
@@ -31,17 +33,14 @@ document.addEventListener('DOMContentLoaded', function() {
         formData.append('role', document.getElementById('role').value);
         
         if (document.getElementById('role').value === 'admin') {
-            formData.append('adminCode', document.getElementById('adminCode').value);
+            formData.append('adminCode', document.getElementById('adminCode').value); // only if therole is admin cause the users don't have it 
         }
 
-        fetch('../PHP/controller.php', {
-            method: 'POST',
-            body: formData
-        })
+        fetch('../PHP/controller.php', {method: 'POST', body: formData })
         .then(response => response.json())
         .then(data => {
             if (data.status === 'success') {
-                alert(data.message);
+                alert(data.message); 
                 window.location.href = 'loginPage.html';
             } else {
                 alert("Error: " + data.message);

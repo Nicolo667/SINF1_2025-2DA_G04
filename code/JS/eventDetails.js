@@ -1,8 +1,8 @@
 document.addEventListener('DOMContentLoaded', () => {
-    const urlParams = new URLSearchParams(window.location.search);
-    const eventId = urlParams.get('id');
+    const urlParams = new URLSearchParams(window.location.search); // take the final part of the url.
+    const eventId = urlParams.get('id'); // thanks to this we can get the eventId.
 
-    console.log("ID retrieved from URL:", eventId); 
+    console.log("ID retrieved from URL:", eventId); // a test that we used during the implementation
 
     if (eventId) {
         fetchEventDetails(eventId);
@@ -108,7 +108,7 @@ function renderArtists(artists) {
     const section = document.getElementById('lineup-section');
     const grid = document.getElementById('event-artists-grid');
 
-    section.style.display = 'block';
+    section.style.display = 'block'; // show the section cause there are artists
     grid.innerHTML = ''; // clen the grid.
 
     artists.forEach(artist => {

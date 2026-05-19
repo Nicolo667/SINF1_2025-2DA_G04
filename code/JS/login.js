@@ -17,7 +17,7 @@ document.addEventListener('DOMContentLoaded', () => {
             })
             .then(response => {
                 if (!response.ok) {
-                    throw new Error('Network error or file not found');
+                    throw new Error('Error');
                 }
                 return response.json();
             })

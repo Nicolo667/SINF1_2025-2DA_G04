@@ -1,7 +1,7 @@
 document.addEventListener('DOMContentLoaded', () => {
     // profile button (it check if the user is logged or not)
     const profileBtn = document.querySelector('.profile-btn');
-    if (profileBtn) {
+    if (profileBtn) { // to avoid that the page crash if doesn't find the btn
         profileBtn.addEventListener('click', (e) => {
             if (!localStorage.getItem('userRole')) {
                 e.preventDefault();
@@ -16,6 +16,7 @@ document.addEventListener('DOMContentLoaded', () => {
         searchBtn.addEventListener('click', performSearch);
     }
 
+    // we can use also the 'enter' on the keyboard
     const searchInput = document.getElementById('eventSearch');
     if (searchInput) {
         searchInput.addEventListener('keypress', (e) => {
@@ -25,17 +26,15 @@ document.addEventListener('DOMContentLoaded', () => {
 
     const sortSelect = document.getElementById('eventSort');
     if (sortSelect) {
-        sortSelect.addEventListener('change', (e) => {
-            loadMainPageData(e.target.value); 
+        sortSelect.addEventListener('change', (e) => { // when we change the type of sort
+            loadMainPageData(e.target.value); // call the value in html cause we change it
         });
     }
 
     loadMainPageData(); // create the structure of main page.
 });
 
-let allEvents = []; // list of events.
-
-function loadMainPageData(sortOrder = 'date_asc') {
+function loadMainPageData(sortOrder = 'date_asc') { // default sorting 
     const eventsContainer = document.getElementById('events-grid');
     const tentsContainer = document.getElementById('tents-grid');
 
@@ -43,26 +42,29 @@ function loadMainPageData(sortOrder = 'date_asc') {
     if (tentsContainer) tentsContainer.innerHTML = ''; // clean also the tents container
 
     // upload the events in the main page.
-    const eventFormData = new FormData();
+    const eventFormData = new FormData(); // container of data that we send to the controller
     eventFormData.append('action', 'getAllEvents'); // call the new controller function. 
     eventFormData.append('sort', sortOrder);
 
     fetch('../PHP/controller.php', { method: 'POST', body: eventFormData }) //call the php controller to get the events.
-    .then(r => r.json())
-    .then(data => {
-        if (data.status === 'success') {
-            allEvents = data.events;
+    // we told the controller to do a POST action and we send the data.
 
-            const activeFilterBtn = document.querySelector('.filter-btn.active'); // mantain the filter 
-            const currentFilter = activeFilterBtn ? activeFilterBtn.innerText.trim() : 'all';
+    // from here php send to js the correct data that js wants.
+    .then(r => r.json()) // 'r' is the response
+    .then(data => { // the final translated object is called data
+        if (data.status === 'success') { // check if everything is correct  
+            allEvents = data.events; // list of the events 
+
+            const activeFilterBtn = document.querySelector('.filter-btn.active'); // search the active filter in the page 
+            const currentFilter = activeFilterBtn ? activeFilterBtn.innerText.trim() : 'all'; // if there is a btn take his test, if not use 'all'
 
             renderFilteredEvents('all');  // show all the events in the beginning.
-            setupFilters();
+            setupFilters(); // refresh the page based on the category
         }
     });
 
     // upload the tents in the main page.
-    const tentFormData = new FormData();
+    const tentFormData = new FormData(); // we do the same thing for the tents.
     tentFormData.append('action', 'getTents');
     tentFormData.append('sort', sortOrder);
 
@@ -72,33 +74,34 @@ function loadMainPageData(sortOrder = 'date_asc') {
         if (data.status === 'success' && tentsContainer) {
             // if there are some tents, show them.
             if (data.tents && data.tents.length > 0) {
-                tentsContainer.innerHTML = data.tents.map(t => renderTentCard(t)).join('');
+                tentsContainer.innerHTML = data.tents.map(t => renderTentCard(t)).join(''); 
+                // for every tent call the function renderTentCard, crate a long string with all the html of the tents
             } else {
                 tentsContainer.innerHTML = '<p>No tents available.</p>';
             }
         }
     })
-    .catch(err => console.error("Errore tende:", err));
+    .catch(err => console.error("Errore tents:", err));
 
 }
 
 function setupFilters() { // set up the filter botton.
-    const buttons = document.querySelectorAll('.filter-btn');
+    const buttons = document.querySelectorAll('.filter-btn'); // all the element of that class
     buttons.forEach(btn => {
         btn.addEventListener('click', function() {
             buttons.forEach(b => b.classList.remove('active')); // remove the active class from all buttons.
-            this.classList.add('active');
-            renderFilteredEvents(this.getAttribute('data-filter'));
+            this.classList.add('active'); // put the active status at this one
+            renderFilteredEvents(this.getAttribute('data-filter')); // show the ewents below at that category.
         });
     });
 }
 
 function renderFilteredEvents(filter) { // show the events according to the filter.
     const container = document.getElementById('events-grid');
-    if (!container) return;
+    if (!container) return; // check
 
-    let filtered = allEvents;
-    const f = filter.toLowerCase();
+    let filtered = allEvents; 
+    const f = filter.toLowerCase(); // lower case to avoid errors
 
     if (f === 'music') { // if the user click on music, show only the music events.
         filtered = allEvents.filter(e => e.type.toLowerCase().includes('concert') || e.type.toLowerCase().includes('party'));
@@ -106,18 +109,19 @@ function renderFilteredEvents(filter) { // show the events according to the filt
         filtered = allEvents.filter(e => !e.type.toLowerCase().includes('concert') && !e.type.toLowerCase().includes('party'));
     }
 
-    container.innerHTML = filtered.map(e => renderEventCard(e)).join(''); 
+    container.innerHTML = filtered.map(e => renderEventCard(e)).join(''); // create one test with html code.
 }
 
 function renderEventCard(event) { // create the card for the events.
-    // change the first line, when we click on the card we go to the event own page.
-    const stars = event.avg_rating ? `⭐ ${event.avg_rating}` : "No ratings yet"; //add the stars on the main page.
+    // if the events have a rate, we show it.
+    const stars = event.avg_rating ? `⭐ ${event.avg_rating}` : "No ratings yet"; //add the stars
 
-    const countdownId = `timer-${event.id}`; // add the timer for the dinamic countdown
+    const countdownId = `timer-${event.id}`; // add the timer for the dinamic countdown (generate ad id)
     setTimeout(() => {
         updateCountdown(countdownId, event.event_date, event.event_time);
     }, 100);
 
+    // in the first line, when we click on the card we go to the event own page.
     return `
         <article class="card" onclick="window.location.href='eventDetails.html?id=${event.id}'" style="cursor: pointer;"> 
             <div class="category">${event.type}</div>
@@ -182,7 +186,7 @@ function performSearch() {
     // important to reset all the filter cause if is not like this the bar couldn't find some events
     renderFilteredEvents('all'); 
     
-    // btn All active
+    // btn All active   
     const buttons = document.querySelectorAll('.filter-btn');
     buttons.forEach(btn => {
         btn.classList.remove('active');
@@ -201,7 +205,7 @@ function performSearch() {
         const title = titleElement.innerText.toLowerCase();
 
         if (title.includes(searchTerm)) {
-            card.scrollIntoView({ behavior: 'smooth', block: 'center' });
+            card.scrollIntoView({ behavior: 'smooth', block: 'center' }); // scroll the page 
 
             // change the effect of the card when finds it
             card.style.transition = "all 0.4s ease";
@@ -224,7 +228,7 @@ function performSearch() {
 }
 
 function submitTentRating(tentId, score) {
-    const userId = localStorage.getItem('userId'); 
+    const userId = localStorage.getItem('userId'); // recover the user
     
 
     const formData = new FormData();
@@ -234,7 +238,7 @@ function submitTentRating(tentId, score) {
     formData.append('score', score);
 
     fetch('../PHP/controller.php', { method: 'POST', body: formData })
-    .then(r => r.json())
+    .then(r => r.json()) // r is the answer 
     .then(data => {
         if (data.status === 'success') {
             alert(data.message);
@@ -247,13 +251,13 @@ function submitTentRating(tentId, score) {
 }
 
 function updateCountdown(elementId, dateStr, timeStr) {
-    const timerElement = document.getElementById(elementId);
+    const timerElement = document.getElementById(elementId); // timer id (we create it before)
     if (!timerElement) return;
 
     // date and hours combination
-    const eventDate = new Date(`${dateStr}T${timeStr}`).getTime();
+    const eventDate = new Date(`${dateStr}T${timeStr}`).getTime(); // trasform the date in the variable that we need
 
-    const interval = setInterval(() => {
+    const interval = setInterval(() => { // The code executes itself every 1000 ms so that the page does not need to be reloaded.
         const now = new Date().getTime();
         const distance = eventDate - now;
 

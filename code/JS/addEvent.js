@@ -39,7 +39,7 @@ document.addEventListener('DOMContentLoaded', () => {
         })
         .catch(error => {
             console.error('Error:', error);
-            alert('Critical error: could not save the event.');
+            alert('Critical error.');
         });
     });
 });

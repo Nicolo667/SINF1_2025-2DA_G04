@@ -73,7 +73,7 @@ function loadEvents() {
     });
 }
 
-// function to render the events on the page.
+// function to render the events on this page.
 function renderEvents(events) {
     const eventsGrid = document.getElementById('eventsGrid');
     if (!eventsGrid) {
