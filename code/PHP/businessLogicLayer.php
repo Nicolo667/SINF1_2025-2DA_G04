@@ -55,7 +55,7 @@ function loginUser($data) {
         // Check if user exists and verify password
         if ($user && password_verify($data['password'], $user['password_hash'])) {
             // Start session to store user data
-            if (session_status() === PHP_SESSION_NONE) {
+            if (session_status() === PHP_SESSION_NONE) { // no session start yet
                 session_start();
             }
             $_SESSION['user_id'] = $user['id'];
@@ -136,7 +136,7 @@ function getAdminEvents() {
 
     // check if the user is an admin
     if (!isset($_SESSION['user_role']) || $_SESSION['user_role'] !== 'admin') {
-        return ["status" => "error", "message" => "Unauthorized: Only admins can view events"];
+        return ["status" => "error", "message" => "Unauthorized"];
     }
 
     $adminId = $_SESSION['user_id'];
@@ -165,10 +165,10 @@ function getEventById($data) {
 
     //check of admin.
     if (!isset($_SESSION['user_role']) || $_SESSION['user_role'] !== 'admin') {
-        return ["status" => "error", "message" => "Unauthorized: Only admins can view this event"];
+        return ["status" => "error", "message" => "Unauthorized"];
     }
 
-    $eventId = isset($data['event_id']) ? (int)$data['event_id'] : 0;
+    $eventId = isset($data['event_id']) ? (int)$data['event_id'] : 0; 
     if ($eventId <= 0) {
         return ["status" => "error", "message" => "Invalid event id"];
     }
@@ -200,7 +200,7 @@ function updateEvent($data) {
 
     // check of the admin
     if (!isset($_SESSION['user_role']) || $_SESSION['user_role'] !== 'admin') {
-        return ["status" => "error", "message" => "Unauthorized: Only admins can update events"];
+        return ["status" => "error", "message" => "Unauthorized"];
     }
 
     // check if the event id is valid (belong to admin).
@@ -225,7 +225,7 @@ function updateEvent($data) {
         ]);
 
         if ($stmt->rowCount() === 0) {
-            return ["status" => "error", "message" => "No event was updated. Please check the event id or permissions."];
+            return ["status" => "error", "message" => "No event was updated."];
         }
 
         return ["status" => "success", "message" => "Event updated successfully!"];
@@ -243,7 +243,7 @@ function deleteEvent($data) {
     }
 
     if (!isset($_SESSION['user_role']) || $_SESSION['user_role'] !== 'admin') {
-        return ["status" => "error", "message" => "Unauthorized: Only admins can delete events"];
+        return ["status" => "error", "message" => "Unauthorized"];
     }
 
     $eventId = isset($data['event_id']) ? (int)$data['event_id'] : 0;
@@ -258,7 +258,7 @@ function deleteEvent($data) {
         $stmt->execute([$eventId, $_SESSION['user_id']]);
 
         if ($stmt->rowCount() === 0) {
-            return ["status" => "error", "message" => "No event was deleted. Please check the event id or permissions."];
+            return ["status" => "error", "message" => "No event was deleted."];
         }
 
         return ["status" => "success", "message" => "Event deleted successfully!"];
@@ -277,7 +277,7 @@ function getAllEvents($data = null) {
         $sort = isset($data['sort']) ? $data['sort'] : 'date_asc';
 
         if ($eventId) {
-            // get all the events and also their averange 
+            // get the events and also its averange 
             $sql = "SELECT id, title, description, DATE_FORMAT(event_date, '%Y-%m-%d') AS event_date, 
                            event_time, location, type,
                            (SELECT ROUND(AVG(score), 1) FROM ratings WHERE event_id = events.id) AS avg_rating
@@ -301,7 +301,7 @@ function getAllEvents($data = null) {
             return ["status" => "success", "event" => $event, "artists" => $artists];
 
         } else {
-            $orderBy = "event_date ASC, event_time ASC"; // Default senza alias 'e.'
+            $orderBy = "event_date ASC, event_time ASC"; 
             if ($sort === 'rating_desc') {
                 $orderBy = "avg_rating DESC, event_date ASC";
             }
@@ -420,8 +420,7 @@ function getUserAgenda() {
     } catch (PDOException $e) {
         return [
             "status" => "error", 
-            "message" => "Error during uploading user_agenda: " . $e->getMessage()
-        ];
+            "message" => "Error during uploading user_agenda: " . $e->getMessage()];
     }
 }
 

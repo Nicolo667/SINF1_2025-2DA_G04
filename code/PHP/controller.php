@@ -72,7 +72,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     }
 
     if ($action === 'getTents') {
-        $sort = $_POST['sort'] ?? 'name_asc';
+        $sort = $_POST['sort'] ?? 'name_asc'; // control inside the data sent from js if there is 'sort'
         echo json_encode(getAllTents($sort));
         exit;
     }
@@ -110,7 +110,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     }
 
     if ($action === 'checkUpcomingEvents') {
-        if (session_status() === PHP_SESSION_NONE) session_start();
+        if (session_status() === PHP_SESSION_NONE) session_start(); // if the session isn't already started
             if (isset($_SESSION['user_id'])) {
                 echo json_encode(getUpcomingEvents($_SESSION['user_id']));
             } else {
